@@ -2,6 +2,7 @@
   "name": "torus-explorer",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://Quint-S.github.io/torus-explorer/",
   "type": "module",
   "scripts": {
     "predeploy" : "npm run build",
