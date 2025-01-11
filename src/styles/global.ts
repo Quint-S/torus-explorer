@@ -3,7 +3,7 @@ import { createGlobalStyle } from 'styled-components'
 export const GlobalStyle = createGlobalStyle`
     @font-face {
         font-family: pixelfont;
-        src: url('/public/fonts/technofosiano.ttf');
+        src: url('fonts/technofosiano.ttf');
     }
     
     body {
