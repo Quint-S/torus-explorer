@@ -4,8 +4,6 @@ import {useState} from "react";
 import {TerminalLoading} from "../components/TerminalLoading.tsx";
 import {PaginationControls} from "../components/PaginationControls.tsx";
 import {DataTable} from "../components/DataTable.tsx";
-import {Link} from "react-router-dom";
-import {ResponsiveAddress} from "../components/ResponsiveAddress.tsx";
 
 const GET_EVENTS = gql`
   query GetEvents($first: Int!, $offset: Int!) {
@@ -56,7 +54,7 @@ export const Events = () => {
       <TerminalWindow title="events" footer={pageControls}>
         {loading && <TerminalLoading/>}
         {error && <div>Error: {error.message}</div>}
-        {data && <DataTable names={['Block #', 'Event Idx', 'event']} records={data.events.nodes.map(event => {
+        {data && <DataTable names={['Block #', 'Event Idx', 'event']} records={data.events.nodes.map((event: { id: string; blockNumber: string; module: string; eventName: string; }) => {
           return {
             id: event.id, data: [event.blockNumber, event.id, `${event.module}::${event.eventName}`
             ]

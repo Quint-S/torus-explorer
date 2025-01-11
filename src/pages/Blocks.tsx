@@ -4,7 +4,6 @@ import {useState} from "react";
 import {PaginationControls} from "../components/PaginationControls.tsx";
 import {TerminalLoading} from "../components/TerminalLoading.tsx";
 import {DataTable} from "../components/DataTable.tsx";
-import {formatAddress, formatTORUS} from "../utils/utils.ts";
 import {ResponsiveAddress} from "../components/ResponsiveAddress.tsx";
 
 const GET_BLOCKS = gql`
@@ -53,7 +52,7 @@ export const Blocks = () => {
       <TerminalWindow title="Blocks" footer={pageControls}>
         {loading && <TerminalLoading/>}
         {error && <div>Error: {error.message}</div>}
-        {data && <DataTable names={['Height', 'Hash', 'Timestamp']} records={data.blocks.nodes.map(block => {
+        {data && <DataTable names={['Height', 'Hash', 'Timestamp']} records={data.blocks.nodes.map((block: { id: string; height: number; hash: string; timestamp: string | number | Date; }) => {
           return {id: block.id, data: [block.height, <ResponsiveAddress address={block.hash}/> , new Date(block.timestamp).toLocaleString()
             ]}
         })} />}

@@ -1,9 +1,8 @@
 import { gql, useQuery } from '@apollo/client'
 import { TerminalWindow } from '../components/TerminalWindow'
-import {TransferCards} from "../components/TransferCards.tsx";
-import {formatAddress, formatTORUS} from "../utils/utils.ts";
+import { formatTORUS} from "../utils/utils.ts";
 import { DataTable } from '../components/DataTable.tsx';
-import {FormEvent, useState} from 'react';
+import { useState} from 'react';
 import { PaginationControls } from '../components/PaginationControls.tsx';
 import { TerminalLoading } from '../components/TerminalLoading.tsx';
 import {Link, useNavigate} from "react-router-dom";
@@ -41,7 +40,7 @@ export const Accounts = () => {
       setCurrentPage(prev => Math.max(0, prev - 1));
     };
     const onsearch = (search: string) => {
-        navigate(`account/${search}`)
+        navigate(`/account/${search}`)
     }
     const pageControls = (
 <div className={'flex'}>
@@ -67,7 +66,7 @@ export const Accounts = () => {
               <div >
                 <DataTable
                     names={['Address', 'Total Balance', 'Free', 'Staked']}
-                    records={data.accounts.nodes.map(acc => ({
+                    records={data.accounts.nodes.map((acc: { id: string; address: string; balanceTotal: number; balanceFree: number; balanceStaked: number; }) => ({
                       id: acc.id,
                       data: [
                           <Link to={`/account/${acc.address}`}><ResponsiveAddress address={acc.address}/></Link>,

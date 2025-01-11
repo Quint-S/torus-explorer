@@ -53,7 +53,7 @@ export const Agents = () => {
       <TerminalWindow title="agents" footer={pageControls}>
         {loading && <TerminalLoading/>}
         {error && <div>Error: {error.message}</div>}
-        {data && <DataTable names={['Register Block #', 'name', 'key']} records={data.agents.nodes.map(agent => {
+        {data && <DataTable names={['Register Block #', 'name', 'key']} records={data.agents.nodes.map((agent: { id: string; registeredAt: string; name: string; }) => {
           return {
             id: agent.id, data: [agent.registeredAt, agent.name, `${agent.id}`
             ]

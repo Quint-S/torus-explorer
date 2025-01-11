@@ -29,7 +29,7 @@ export const PaginationControls = ({
       <span>{currentPage + 1} of {Math.ceil(totalCount/itemsPerPage)}</span>
       <button
         onClick={onNext}
-        disabled={(dataLength && dataLength < itemsPerPage)}
+        disabled={Boolean((dataLength && dataLength < itemsPerPage))}
         className={'p-1 bg-transparent border-0 hover:text-blue-400'}
       >
         ⟶

@@ -1,6 +1,6 @@
 import { gql, useQuery } from '@apollo/client'
 import { TerminalWindow } from '../components/TerminalWindow'
-import { formatAddress, formatTORUS } from '../utils/utils.ts'
+import { formatTORUS } from '../utils/utils.ts'
 import {Link, useParams} from 'react-router-dom'
 import { TerminalLoading } from '../components/TerminalLoading.tsx'
 import styled from 'styled-components'
@@ -95,7 +95,7 @@ export const AccountDetails = () => {
         {(data?.transfers?.totalCount ?? 0) > 0 && (
             <div style={{padding: '8px 0',
               borderTop: '1px solid #0050a1'}}>
-            <DataTable names={['Amount', 'From', 'To', 'Height', 'Timestamp']} records={data.transfers.nodes.map(transfer => {
+            <DataTable names={['Amount', 'From', 'To', 'Height', 'Timestamp']} records={data.transfers.nodes.map((transfer: { id: string; amount: number; from: string; to: string; blockNumber: string; timestamp: string | number | Date }) => {
               return {id: transfer.id, data: [formatTORUS(transfer.amount), <Link to={`/account/${transfer.from}`}><ResponsiveAddress address={transfer.from}/></Link>, <Link to={`/account/${transfer.to}`}><ResponsiveAddress address={transfer.to}/></Link>, transfer.blockNumber, new Date(transfer.timestamp).toLocaleString()
                 ]}
             })} /></div>

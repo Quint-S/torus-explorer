@@ -1,5 +1,5 @@
 import { FormEvent, useRef, useState } from "react";
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
 interface SearchBarProps {
   placeholder: string;

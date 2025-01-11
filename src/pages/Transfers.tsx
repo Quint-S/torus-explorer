@@ -18,7 +18,7 @@ const GET_TRANSFERS = gql`
 `
 
 
-import {formatAddress, formatTORUS} from "../utils/utils.ts";
+import {formatTORUS} from "../utils/utils.ts";
 import {DataTable} from "../components/DataTable.tsx";
 import {useState} from "react";
 import {PaginationControls} from "../components/PaginationControls.tsx";
@@ -54,11 +54,12 @@ export const Transfers = () => {
             onPrevious={handlePrevious}
         />}</>
   );
+
   return (
     <TerminalWindow title="Transfers" footer={pageControls}>
       {loading && <TerminalLoading/>}
       {error && <div>Error: {error.message}</div>}
-      {data && <DataTable names={['Amount', 'From', 'To', 'Height', 'Timestamp']} records={data.transfers.nodes.map(transfer => {
+      {data && <DataTable names={['Amount', 'From', 'To', 'Height', 'Timestamp']} records={data.transfers.nodes.map((transfer: { id: string; amount: number; from: string; to: string; blockNumber: string; timestamp: string | number | Date; }) => {
         return {id: transfer.id, data: [<div className={'text-left pl-2'}>{formatTORUS(transfer.amount)}</div>, <Link to={`/account/${transfer.from}`}><ResponsiveAddress address={transfer.from}/></Link>, <Link to={`/account/${transfer.to}`}><ResponsiveAddress address={transfer.to}/></Link>, transfer.blockNumber, new Date(transfer.timestamp).toLocaleString()
           ]}
       })} />}
