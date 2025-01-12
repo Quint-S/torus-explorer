@@ -43,7 +43,7 @@ jobs:
           path: ./dist
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v1
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: "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"
           publish_dir: ./dist
