@@ -9,7 +9,7 @@ export const GlobalStyle = createGlobalStyle`
     body {
         background-color: #111;
         //color: rgba(0, 140, 255, 0.8);
-        font-family: pixelfont, monospace;
+        font-family: monospace;
         margin: 0;
         padding: 0;
         font-smooth: never;

@@ -19,21 +19,24 @@ export function formatTORUS(torusAmount: number){
     return s;
 }
 
-export function convertToInternationalCurrencySystem (labelValue: number): string | number {
+export function convertToInternationalCurrencySystem(labelValue: number): string {
+    const absValue = Math.abs(Number(labelValue));
+    let formatted: string;
 
-    // Nine Zeroes for Billions
-    return Math.abs(Number(labelValue)) >= 1.0e+9
+    if (absValue >= 0.999995e+9) { // Billion threshold
+        formatted = (absValue / 1.0e+9).toFixed(2) + "B";
+    } else if (absValue >= 0.999995e+6) { // Million threshold
+        formatted = (absValue / 1.0e+6).toFixed(2) + "M";
+    } else if (absValue >= 0.999995e+3) { // Thousand threshold
+        formatted = (absValue / 1.0e+3).toFixed(2) + "K";
+    } else {
+        formatted = absValue.toFixed(2);
+    }
 
-        ? (Math.abs(Number(labelValue)) / 1.0e+9).toFixed(2) + "B"
-        // Six Zeroes for Millions
-        : Math.abs(Number(labelValue)) >= 1.0e+6
+    // Remove trailing zeros after decimal point
+    if (formatted.includes('.')) {
+        formatted = formatted.replace(/\.?0+([KMB])?$/, '$1');
+    }
 
-            ? (Math.abs(Number(labelValue)) / 1.0e+6).toFixed(2) + "M"
-            // Three Zeroes for Thousands
-            : Math.abs(Number(labelValue)) >= 1.0e+3
-
-                ? (Math.abs(Number(labelValue)) / 1.0e+3).toFixed(2) + "K"
-
-                : Math.abs(Number(labelValue)).toFixed(2);
-
+    return formatted;
 }
