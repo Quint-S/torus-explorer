@@ -1,58 +1,49 @@
-name: Prod
+name: Deploy
 
 on:
-  workflow_dispatch:
   push:
-    tags:
-      - '**'
+    branches:
+      - main
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-      - name: Install pnpm
-        run: |
-          curl -L https://github.com/pnpm/pnpm/releases/download/v8.7.5/pnpm-linux-x64 -o pnpm
-          chmod +x pnpm
-          mkdir -p /usr/local/bin
-          sudo mv pnpm /usr/local/bin
-          pnpm --version
-
-      - name: Install Node.js
+      - name: Setup Node
         uses: actions/setup-node@v3
-        with:
-          node-version: '18.x'
-
-      - name: Cache pnpm modules
-        uses: actions/cache@v3
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
 
       - name: Install dependencies
-        run: |
-          pnpm config set store-dir ~/.pnpm-store
-          pnpm install --prefer-offline || pnpm install --no-frozen-lockfile
+        uses: bahmutov/npm-install@v1
 
-      - name: Build
-        run: pnpm build
+      - name: Build project
+        run: npm run build
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload production-ready build files
+        uses: actions/upload-artifact@v3
         with:
-          name: dist
-          path: dist/*
+          name: production-files
+          path: ./dist
 
   deploy:
-    runs-on: self-hosted
+    name: Deploy
     needs: build
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: dist
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
 
-      - name: Deploy built artifacts
-        run: rsync -avzr --delete --filter=':- .gitignore' ./* /web
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: production-files
+          path: ./dist
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: "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"
+          publish_dir: ./dist
