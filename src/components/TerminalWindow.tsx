@@ -99,11 +99,11 @@ interface Tab {
 export const TerminalWindow: React.FC<TerminalWindowProps> = ({ title, children, footer }) => {
     return (
       <TerminalContainer>
-        <TerminalHeader>{title.toLowerCase().replace(' ', '_')}.rs (~/torus) - TOREX</TerminalHeader>
+        <TerminalHeader>{title.toLowerCase().replace(' ', '_')}.rs (~/torus) - TORE♓︎</TerminalHeader>
         <TerminalContent>
           {children}
         </TerminalContent>
-        <TerminalFooter>{footer ? footer : 'torus-explorer v0.1.0 BETA'}</TerminalFooter>
+        <TerminalFooter>{footer ? footer : 'torus-e♓︎plorer v0.1.0 BETA'}</TerminalFooter>
       </TerminalContainer>
     )
   }

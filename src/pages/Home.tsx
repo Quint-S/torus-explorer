@@ -32,7 +32,7 @@ export const Home = () => {
             <p>Last Processed
               Timestamp: {new Date(parseInt(data._metadata.lastProcessedTimestamp)).toLocaleString()}</p>
             <p>Target Height: {data._metadata.targetHeight}</p>
-            <p>Circulating supply: {formatTORUS(data.chainInfo.value)} TORUS</p>
+            <p>Circulating supply: {formatTORUS(data.chainInfo.value)} ♓TORUS</p>
           </div>
       )}
     </TerminalWindow>

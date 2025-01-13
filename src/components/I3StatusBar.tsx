@@ -108,7 +108,7 @@ export const I3StatusBar = () => {
       {!loading && !error && (
           <StatusItem>
             <span>Circulating:</span>
-            <span>{loading ? <TerminalLoading/> : <>{formatTORUS(parseFloat(`${BigInt(data.chainInfo.value)}`))}</>}</span>
+            <span>{loading ? <TerminalLoading/> : <>♓︎{formatTORUS(parseFloat(`${BigInt(data.chainInfo.value)}`))}︎</>}</span>
           </StatusItem>
       )}
       <StatusItem>
