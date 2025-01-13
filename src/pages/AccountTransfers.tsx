@@ -73,7 +73,10 @@ export const AccountTransfers = () => {
             <div style={{padding: '8px 0',
               borderTop: '1px solid #0050a1'}}>
             <DataTable names={['Amount', 'From', 'To', 'Height', 'Timestamp']} records={data.transfers.nodes.map((transfer: { id: string; amount: number; from: string; to: string; blockNumber: string; timestamp: string | number | Date }) => {
-              return {id: transfer.id, data: [formatTORUS(transfer.amount), <Link to={`/account/${transfer.from}`}><ResponsiveAddress address={transfer.from}/></Link>, <Link to={`/account/${transfer.to}`}><ResponsiveAddress address={transfer.to}/></Link>, transfer.blockNumber, new Date(transfer.timestamp).toLocaleString()
+              const formattedFrom = <ResponsiveAddress address={transfer.from}/>;
+              const formattedTo = <ResponsiveAddress address={transfer.to}/>;
+
+              return {id: transfer.id, data: [formatTORUS(transfer.amount), transfer.from === address ? formattedFrom : <Link to={`/account/${transfer.from}`}>{formattedFrom}</Link>, transfer.to === address ? formattedTo : <Link to={`/account/${transfer.to}`}><ResponsiveAddress address={transfer.to}/></Link>, transfer.blockNumber, new Date(transfer.timestamp).toLocaleString()
                 ]}
             })} /></div>
         )}

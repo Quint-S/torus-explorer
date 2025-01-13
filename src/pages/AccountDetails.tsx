@@ -6,6 +6,7 @@ import { TerminalLoading } from '../components/TerminalLoading.tsx'
 import styled from 'styled-components'
 import {AccountTransfers} from "./AccountTransfers.tsx";
 import {AccountExtrinsics} from "./AccountExtrinsics.tsx";
+import {CopyButton} from "../components/CopyButton.tsx";
 
 const GET_ACCOUNT = gql`
   query GetAccount($address: String!) {
@@ -63,7 +64,7 @@ export const AccountDetails = () => {
             <div>
               <DetailRow>
                 <DetailLabel>Address:</DetailLabel>
-                <DetailValue>{data.account.id}</DetailValue>
+                <DetailValue>{data.account.id} <CopyButton textToCopy={data.account.id}/></DetailValue>
               </DetailRow>
               <DetailRow>
                 <DetailLabel>Total Balance:</DetailLabel>
