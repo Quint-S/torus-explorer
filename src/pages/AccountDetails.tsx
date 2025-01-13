@@ -5,6 +5,7 @@ import {useParams} from 'react-router-dom'
 import { TerminalLoading } from '../components/TerminalLoading.tsx'
 import styled from 'styled-components'
 import {AccountTransfers} from "./AccountTransfers.tsx";
+import {AccountExtrinsics} from "./AccountExtrinsics.tsx";
 
 const GET_ACCOUNT = gql`
   query GetAccount($address: String!) {
@@ -87,11 +88,11 @@ export const AccountDetails = () => {
               },
               {
                 label: 'Extrinsics',
-                content: <div>Extrinsics information here...</div>
+                content: <AccountExtrinsics/>
               },
               {
                 label: 'Delegations',
-                content: <div>Delegations data here...</div>
+                content: <div>Coming soon..</div>
               }
             ]}
         />

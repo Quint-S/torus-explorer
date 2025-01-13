@@ -1,5 +1,6 @@
 import { gql, useQuery } from '@apollo/client'
 import { TerminalWindow } from '../components/TerminalWindow'
+import {formatTORUS} from "../utils/utils.ts";
 
 const GET_NETWORK_INFO = gql`
   query {
@@ -9,6 +10,9 @@ const GET_NETWORK_INFO = gql`
       targetHeight
       chain
       specName
+    }
+    chainInfo(id: "CircSupply") {
+      value
     }
   }
 `
@@ -28,6 +32,7 @@ export const Home = () => {
             <p>Last Processed
               Timestamp: {new Date(parseInt(data._metadata.lastProcessedTimestamp)).toLocaleString()}</p>
             <p>Target Height: {data._metadata.targetHeight}</p>
+            <p>Circulating supply: {formatTORUS(data.chainInfo.value)} TORUS</p>
           </div>
       )}
     </TerminalWindow>

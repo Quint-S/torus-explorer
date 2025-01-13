@@ -1,7 +1,6 @@
-import {ReactElement, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {TerminalLoading} from "./TerminalLoading.tsx";
-import {useParams} from "react-router-dom";
 import {gql, useQuery} from "@apollo/client";
 import {formatTORUS} from "../utils/utils.ts";
 
@@ -28,6 +27,12 @@ const StatusItem = styled.div`
   padding: 0 8px;
   &:not(:last-child) {
     border-right: 1px solid #44475a;
+  }
+`;
+
+const TimeStatusItem = styled(StatusItem)`
+  @media (max-width: 475px) {
+    display: none;
   }
 `;
 
@@ -87,36 +92,36 @@ export const I3StatusBar = () => {
     return () => clearInterval(timeInterval);
   }, []);
 
-  const formatUSD = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(value);
-  };
+  // const formatUSD = (value: number) => {
+  //   return new Intl.NumberFormat('en-US', {
+  //     style: 'currency',
+  //     currency: 'USD',
+  //     minimumFractionDigits: 2,
+  //     maximumFractionDigits: 2,
+  //   }).format(value);
+  // };
 
 
 
   return (
     <StatusBarContainer>
+      {!loading && !error && (
+          <StatusItem>
+            <span>Circulating:</span>
+            <span>{loading ? <TerminalLoading/> : <>{formatTORUS(parseFloat(`${BigInt(data.chainInfo.value)}`))}</>}</span>
+          </StatusItem>
+      )}
       <StatusItem>
-        <span>TORUS:</span>
         {loadingPrice ? (
           <span><TerminalLoading/></span>
         ) : (
           <span>${price}</span>
         )}
       </StatusItem>
-      {!loading && (
-        <StatusItem>
-          <span>VOL:</span>
-          <span>{loading ? <TerminalLoading/> : <>${formatTORUS(parseFloat(String(BigInt(data.chainInfo.value) / BigInt('1000000000000000000'))))}</>}</span>
-        </StatusItem>
-      )}
-      <StatusItem>
+
+      <TimeStatusItem>
         {time}
-      </StatusItem>
+      </TimeStatusItem>
     </StatusBarContainer>
   );
 }; 
