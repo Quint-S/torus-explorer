@@ -1,5 +1,5 @@
 import { gql, useQuery } from '@apollo/client'
-import { TerminalWindow } from '../components/TerminalWindow'
+import {TerminalTabs, TerminalWindow} from '../components/TerminalWindow'
 import { formatTORUS } from '../utils/utils.ts'
 import {useParams} from 'react-router-dom'
 import { TerminalLoading } from '../components/TerminalLoading.tsx'
@@ -14,18 +14,6 @@ account(id: $address) {
     balanceStaked
     balanceTotal
     updatedAt
-  }
-  transfers(filter: {or: [{from: {equalTo: $address}}, {to: {equalTo: $address}}]} orderBy: BLOCK_NUMBER_DESC ) {
-    nodes {
-      amount
-      blockNumber
-      extrinsicId
-      from
-      id
-      timestamp
-      to
-    }
-    totalCount
   }
     
   }
@@ -91,7 +79,24 @@ export const AccountDetails = () => {
             </div>
         )}
 
-        <AccountTransfers />
+        <TerminalTabs
+            tabs={[
+              {
+                label: 'Transfers',
+                content: <AccountTransfers />
+              },
+              {
+                label: 'Extrinsics',
+                content: <div>Extrinsics information here...</div>
+              },
+              {
+                label: 'Delegations',
+                content: <div>Delegations data here...</div>
+              }
+            ]}
+        />
+
+        {/*<AccountTransfers />*/}
         {/*{(data?.transfers?.totalCount ?? 0) > 0 && (*/}
         {/*    <div style={{padding: '8px 0',*/}
         {/*      borderTop: '1px solid #0050a1'}}>*/}

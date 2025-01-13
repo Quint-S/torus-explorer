@@ -10,7 +10,7 @@ import {PaginationControls} from "../components/PaginationControls.tsx";
 
 const GET_ACCOUNT_TRANSFERS = gql`
   query GetAccountTransfers($first: Int!, $offset: Int!, $address: String!) {
-    transfers(filter: {or: [{from: {equalTo: $address}}, {to: {equalTo: $address}}]}, orderBy: BLOCK_NUMBER_DESC) {
+    transfers(first: $first, offset: $offset, filter: {or: [{from: {equalTo: $address}}, {to: {equalTo: $address}}]}, orderBy: BLOCK_NUMBER_DESC) {
       nodes {
         id
         blockNumber
