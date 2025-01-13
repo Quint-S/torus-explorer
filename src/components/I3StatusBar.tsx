@@ -1,5 +1,9 @@
-import { useEffect, useState } from 'react';
+import {ReactElement, useEffect, useState} from 'react';
 import styled from 'styled-components';
+import {TerminalLoading} from "./TerminalLoading.tsx";
+import {useParams} from "react-router-dom";
+import {gql, useQuery} from "@apollo/client";
+import {formatTORUS} from "../utils/utils.ts";
 
 const StatusBarContainer = styled.div`
   position: fixed;
@@ -35,11 +39,19 @@ interface DexScreenerResponse {
   }>;
 }
 
+const GET_SUPPLY = gql`
+  query GetSupply {
+    chainInfo(id: "CircSupply") {
+      value
+    }
+  }
+`
+
 export const I3StatusBar = () => {
+  const { loading, error, data } = useQuery(GET_SUPPLY);
   const [price, setPrice] = useState<string | null>(null);
-  const [volume24h, setVolume24h] = useState<number | null>(null);
-  const [liquidity, setLiquidity] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
+  // const [liquidity, setLiquidity] = useState<number | null>(null);
+  const [loadingPrice, setLoadingPrice] = useState(true);
   const [time, setTime] = useState(new Date().toLocaleTimeString('en-US', { timeZone: 'UTC' }));
 
   useEffect(() => {
@@ -47,18 +59,17 @@ export const I3StatusBar = () => {
       try {
         const response = await fetch('https://api.dexscreener.com/latest/dex/tokens/0x78EC15C5FD8EfC5e924e9EEBb9e549e29C785867');
         const data: DexScreenerResponse = await response.json();
-        
         // Get the USDC pair data (first pair in the response)
         const pairData = data.pairs[0];
-        
+
         setPrice(pairData.priceUsd);
-        setVolume24h(pairData.volume.h24);
-        setLiquidity(pairData.liquidity.usd);
-        setLoading(false);
+
+        // setLiquidity(pairData.liquidity.usd);
+        setLoadingPrice(false);
       } catch (error) {
         console.error('Error fetching price:', error);
         setPrice('Error');
-        setLoading(false);
+        setLoadingPrice(false);
       }
     };
 
@@ -85,26 +96,22 @@ export const I3StatusBar = () => {
     }).format(value);
   };
 
+
+
   return (
     <StatusBarContainer>
       <StatusItem>
         <span>TORUS:</span>
-        {loading ? (
-          <span>Loading...</span>
+        {loadingPrice ? (
+          <span><TerminalLoading/></span>
         ) : (
           <span>${price}</span>
         )}
       </StatusItem>
-      {!loading && volume24h && (
+      {!loading && (
         <StatusItem>
           <span>VOL:</span>
-          <span>{formatUSD(volume24h)}</span>
-        </StatusItem>
-      )}
-      {!loading && liquidity && (
-        <StatusItem>
-          <span>LIQ:</span>
-          <span>{formatUSD(liquidity)}</span>
+          <span>{loading ? <TerminalLoading/> : <>${formatTORUS(parseFloat(String(BigInt(data.chainInfo.value) / BigInt('1000000000000000000'))))}</>}</span>
         </StatusItem>
       )}
       <StatusItem>
