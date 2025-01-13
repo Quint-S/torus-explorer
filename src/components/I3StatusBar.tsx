@@ -15,7 +15,6 @@ const StatusBarContainer = styled.div`
   padding: 4px 8px;
   display: flex;
   justify-content: flex-end;
-  gap: 16px;
   border-top: 1px solid #44475a;
   z-index: 1000;
 `;
@@ -25,8 +24,8 @@ const StatusItem = styled.div`
   align-items: center;
   gap: 6px;
   padding: 0 8px;
-  &:not(:last-child) {
-    border-right: 1px solid #44475a;
+  &:not(:first-child) {
+    border-left: 1px solid #44475a;
   }
 `;
 
