@@ -1,7 +1,5 @@
 {
-  "rewrites": [
-    { "source": "/", "destination": "/" },
-    { "source": "/accounts", "destination": "/" },
-    { "source": "/account/(.*)", "destination": "/" }
+  "routes": [
+    { "src": "/[^.]+", "dest": "/", "status": 200 }
   ]
 }
