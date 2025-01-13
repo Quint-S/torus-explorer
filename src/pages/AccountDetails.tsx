@@ -1,11 +1,10 @@
 import { gql, useQuery } from '@apollo/client'
 import { TerminalWindow } from '../components/TerminalWindow'
 import { formatTORUS } from '../utils/utils.ts'
-import {Link, useParams} from 'react-router-dom'
+import {useParams} from 'react-router-dom'
 import { TerminalLoading } from '../components/TerminalLoading.tsx'
 import styled from 'styled-components'
-import {DataTable} from "../components/DataTable.tsx";
-import {ResponsiveAddress} from "../components/ResponsiveAddress.tsx";
+import {AccountTransfers} from "./AccountTransfers.tsx";
 
 const GET_ACCOUNT = gql`
   query GetAccount($address: String!) {
@@ -92,14 +91,15 @@ export const AccountDetails = () => {
             </div>
         )}
 
-        {(data?.transfers?.totalCount ?? 0) > 0 && (
-            <div style={{padding: '8px 0',
-              borderTop: '1px solid #0050a1'}}>
-            <DataTable names={['Amount', 'From', 'To', 'Height', 'Timestamp']} records={data.transfers.nodes.map((transfer: { id: string; amount: number; from: string; to: string; blockNumber: string; timestamp: string | number | Date }) => {
-              return {id: transfer.id, data: [formatTORUS(transfer.amount), <Link to={`/account/${transfer.from}`}><ResponsiveAddress address={transfer.from}/></Link>, <Link to={`/account/${transfer.to}`}><ResponsiveAddress address={transfer.to}/></Link>, transfer.blockNumber, new Date(transfer.timestamp).toLocaleString()
-                ]}
-            })} /></div>
-        )}
+        <AccountTransfers />
+        {/*{(data?.transfers?.totalCount ?? 0) > 0 && (*/}
+        {/*    <div style={{padding: '8px 0',*/}
+        {/*      borderTop: '1px solid #0050a1'}}>*/}
+        {/*    <DataTable names={['Amount', 'From', 'To', 'Height', 'Timestamp']} records={data.transfers.nodes.map((transfer: { id: string; amount: number; from: string; to: string; blockNumber: string; timestamp: string | number | Date }) => {*/}
+        {/*      return {id: transfer.id, data: [formatTORUS(transfer.amount), <Link to={`/account/${transfer.from}`}><ResponsiveAddress address={transfer.from}/></Link>, <Link to={`/account/${transfer.to}`}><ResponsiveAddress address={transfer.to}/></Link>, transfer.blockNumber, new Date(transfer.timestamp).toLocaleString()*/}
+        {/*        ]}*/}
+        {/*    })} /></div>*/}
+        {/*)}*/}
       </TerminalWindow>
   )
 }

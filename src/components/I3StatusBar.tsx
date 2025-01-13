@@ -8,7 +8,7 @@ const StatusBarContainer = styled.div`
   right: 0;
   background-color: #282A36;
   color: #f8f8f2;
-  font-family: monospace;
+  //font-family: monospace;
   padding: 4px 8px;
   display: flex;
   justify-content: flex-end;
