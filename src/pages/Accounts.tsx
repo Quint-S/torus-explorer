@@ -31,14 +31,6 @@ export const Accounts = () => {
     const { loading, error, data } = useQuery(GET_ACCOUNTS, {
       variables: { first: itemsPerPage, offset: currentPage * itemsPerPage }
     });
-  
-    const handleNext = () => {
-      setCurrentPage(prev => prev + 1);
-    };
-  
-    const handlePrevious = () => {
-      setCurrentPage(prev => Math.max(0, prev - 1));
-    };
     const onsearch = (search: string) => {
         navigate(`/account/${search}`)
     }
@@ -50,8 +42,7 @@ export const Accounts = () => {
           totalCount={data.accounts.totalCount}
           itemsPerPage={itemsPerPage}
           dataLength={data?.accounts.nodes.length}
-          onNext={handleNext}
-          onPrevious={handlePrevious}
+          onPageChange={setCurrentPage}
         />}<SearchBar placeholder={'Enter address to lookup..'} onSearch={onsearch}/></div>
       );
 

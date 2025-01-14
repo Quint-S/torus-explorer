@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { useState, useEffect } from 'react';
 
 const SidebarContainer = styled.div<{ $isExpanded: boolean }>`
-    width: ${props => props.$isExpanded ? '180px' : '20px'};
+    width: ${props => props.$isExpanded ? '180px' : '30px'};
     padding: ${props => props.$isExpanded ? '16px' : '1px'};
     border-radius: 2px;
     border: 1px solid #0050a1;
@@ -102,12 +102,13 @@ export const Sidebar = () => {
             {navItems.map((item, index) => (
                 <NavItem
                     key={item.to}
+                    onClick={(e) => {if(!isExpanded && isMobile){e.preventDefault()}}}
                     to={item.to}
                     id={`nav-item-${index}`}
                     className={focusedIndex === index ? `hovered` : ''}
                     $isExpanded={isExpanded || !isMobile}
                 >
-                    {isMobile && !isExpanded ? item.label[0] : item.label}
+                    {isMobile && !isExpanded ? item.label : item.label}
                 </NavItem>
             ))}
         </SidebarContainer>

@@ -28,13 +28,7 @@ export const Blocks = () => {
     variables: { first: itemsPerPage, offset: currentPage * itemsPerPage }
   });
 
-  const handleNext = () => {
-    setCurrentPage(prev => prev + 1);
-  };
 
-  const handlePrevious = () => {
-    setCurrentPage(prev => Math.max(0, prev - 1));
-  };
 
   const pageControls = (
       <>
@@ -44,8 +38,8 @@ export const Blocks = () => {
             totalCount={data?.blocks.totalCount}
             itemsPerPage={itemsPerPage}
             dataLength={data?.blocks.nodes.length}
-            onNext={handleNext}
-            onPrevious={handlePrevious}
+            
+          onPageChange={setCurrentPage}
         />}</>
   );
   return (

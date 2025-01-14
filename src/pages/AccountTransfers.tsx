@@ -38,14 +38,6 @@ export const AccountTransfers = () => {
     variables: { first: itemsPerPage, offset: currentPage * itemsPerPage, address }
   });
 
-  const handleNext = () => {
-    setCurrentPage(prev => prev + 1);
-  };
-
-  const handlePrevious = () => {
-    setCurrentPage(prev => Math.max(0, prev - 1));
-  };
-
   const pageControls = (
       <>
         {loading && <TerminalLoading/>}
@@ -54,8 +46,7 @@ export const AccountTransfers = () => {
             totalCount={data?.transfers.totalCount}
             itemsPerPage={itemsPerPage}
             dataLength={data?.transfers.nodes.length}
-            onNext={handleNext}
-            onPrevious={handlePrevious}
+          onPageChange={setCurrentPage}
         />}</>
   );
 
