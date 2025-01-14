@@ -21,7 +21,7 @@ account(id: $address) {
   }
 `
 
-const DetailRow = styled.div`
+export const DetailRow = styled.div`
   display: flex;
   padding: 8px 0;
   border-bottom: 1px solid #0050a1;
@@ -33,14 +33,14 @@ const DetailRow = styled.div`
   }
 `
 
-const DetailLabel = styled.div`
+export const DetailLabel = styled.div`
   width: 200px;
   padding-left: 5px;
   color: #00c4ff;
   font-weight: bold;
 `
 
-const DetailValue = styled.div`
+export const DetailValue = styled.div`
   flex-grow: 1;
   color: #ffffff;
 `

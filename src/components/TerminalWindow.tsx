@@ -10,6 +10,7 @@ const TerminalContainer = styled.div.attrs({className: 'w-full'})`
 
 const TerminalHeader = styled.div`
     border-bottom: 1px solid #00c4ff;
+    color: #009000;
     padding-left: 5px;
     position: sticky;
     top: 0;

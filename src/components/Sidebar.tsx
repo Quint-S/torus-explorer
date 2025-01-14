@@ -17,7 +17,7 @@ const NavItem = styled(NavLink)`
     display: block;
     padding: 8px;
     margin: 4px 0;
-    color: #9a43f8;
+    color: #e04bff;
     text-decoration: none;
 
     &:hover {
@@ -28,6 +28,7 @@ const NavItem = styled(NavLink)`
         color: #535bf2;
         content: '<';
     }
+
     &.hovered:after {
         color: #535bf2;
         content: '<';
@@ -58,7 +59,7 @@ export const Sidebar = () => {
       } else if (e.key === 'ArrowUp') {
         setFocusedIndex(prev => (prev - 1 + navItems.length) % navItems.length);
       } else if (e.key === 'Enter') {
-          setFocusedIndex(-1);
+          // setFocusedIndex(-1);
         const link = document.getElementById(`nav-item-${focusedIndex}`);
         link?.click();
       }

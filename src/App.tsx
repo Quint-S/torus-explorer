@@ -10,6 +10,7 @@ import {Events} from './pages/Events'
 import ThreeJsTorus from './components/ThreeJsTorus'
 import { AccountDetails } from './pages/AccountDetails'
 import { I3StatusBar } from './components/I3StatusBar'
+import {ExtrinsicDetails} from "./pages/ExtrinsicDetails.tsx";
 
 const App = () => {
   return (
@@ -23,7 +24,6 @@ const App = () => {
         paddingBottom: '40px',
         backgroundColor: 'rgba(0,0,0,30%)', 
         backgroundClip: 'content-box',
-        color:'rgb(0, 140, 255)',
         position: 'relative',
         overflow: 'auto'
       }}>
@@ -38,6 +38,7 @@ const App = () => {
           <Route path="/extrinsics" element={<Extrinsics />} />
           <Route path="/events" element={<Events />} />
           <Route path="/account/:address" element={ <AccountDetails />} />
+          <Route path="/extrinsic/:id" element={ <ExtrinsicDetails />} />
         </Routes>
       </div>
     </Router>
