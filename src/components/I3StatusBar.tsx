@@ -11,6 +11,7 @@ const StatusBarContainer = styled.div`
   right: 0;
   background-color: #282A36;
   color: #f8f8f2;
+  text-shadow: 2px 2px 0 #0b0b0b;
   //font-family: monospace;
   padding: 4px 8px;
   display: flex;
