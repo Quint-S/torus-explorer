@@ -58,5 +58,5 @@ export const Home = () => {
         <div className="flex justify-center"><ASCIILogo/></div>
 
     </TerminalWindow>
-  )
+)
 }

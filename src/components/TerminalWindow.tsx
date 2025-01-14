@@ -100,7 +100,7 @@ interface Tab {
 export const TerminalWindow: React.FC<TerminalWindowProps> = ({ title, children, footer }) => {
     return (
       <TerminalContainer>
-        <TerminalHeader>{title.toLowerCase().replace(' ', '_')}.rs (~/torus) - TORE♓︎</TerminalHeader>
+        <TerminalHeader>{title.toLowerCase().replace(' ', '_')}.rs (~/torus) - TorE♓︎</TerminalHeader>
         <TerminalContent>
           {children}
         </TerminalContent>
