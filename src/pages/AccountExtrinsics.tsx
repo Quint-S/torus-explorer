@@ -38,13 +38,7 @@ export const AccountExtrinsics = () => {
     variables: { first: itemsPerPage, offset: currentPage * itemsPerPage, address }
   });
 
-  const handleNext = () => {
-    setCurrentPage(prev => prev + 1);
-  };
 
-  const handlePrevious = () => {
-    setCurrentPage(prev => Math.max(0, prev - 1));
-  };
 
   const pageControls = (
       <>
@@ -54,8 +48,7 @@ export const AccountExtrinsics = () => {
             totalCount={data?.extrinsics.totalCount}
             itemsPerPage={itemsPerPage}
             dataLength={data?.extrinsics.nodes.length}
-            onNext={handleNext}
-            onPrevious={handlePrevious}
+            onPageChange={setCurrentPage}
         />}</>
   );
 

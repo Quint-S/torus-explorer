@@ -38,8 +38,7 @@ export const Agents = () => {
             totalCount={data?.agents.totalCount}
             itemsPerPage={itemsPerPage}
             dataLength={data?.agents.nodes.length}
-            
-          onPageChange={setCurrentPage}
+            onPageChange={setCurrentPage}
         />}</>
   );
   return (
