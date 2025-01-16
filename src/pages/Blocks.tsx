@@ -1,10 +1,11 @@
 import { gql, useQuery } from '@apollo/client'
 import { TerminalWindow } from '../components/TerminalWindow'
-import {useState} from "react";
+import React, {useState} from "react";
 import {PaginationControls} from "../components/PaginationControls.tsx";
 import {TerminalLoading} from "../components/TerminalLoading.tsx";
 import {DataTable} from "../components/DataTable.tsx";
 import {ResponsiveAddress} from "../components/ResponsiveAddress.tsx";
+import {Link} from "react-router-dom";
 
 const GET_BLOCKS = gql`
   query GetBlocks($first: Int!, $offset: Int!) {
@@ -47,7 +48,7 @@ export const Blocks = () => {
         {loading && <TerminalLoading/>}
         {error && <div>Error: {error.message}</div>}
         {data && <DataTable names={['Height', 'Hash', 'Timestamp']} records={data.blocks.nodes.map((block: { id: string; height: number; hash: string; timestamp: string | number | Date; }) => {
-          return {id: block.id, data: [block.height, <ResponsiveAddress address={block.hash}/> , new Date(block.timestamp).toLocaleString()
+          return {id: block.id, data: [<Link to={`/block/${block.height}`}>{block.height}</Link>, <ResponsiveAddress address={block.hash}/> , new Date(block.timestamp).toLocaleString()
             ]}
         })} />}
       </TerminalWindow>

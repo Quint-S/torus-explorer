@@ -4,7 +4,7 @@ import {Link, useParams} from 'react-router-dom'
 import { TerminalLoading } from '../components/TerminalLoading.tsx'
 import {DataTable} from "../components/DataTable.tsx";
 import {ResponsiveAddress} from "../components/ResponsiveAddress.tsx";
-import {useState} from "react";
+import React, {useState} from "react";
 import {PaginationControls} from "../components/PaginationControls.tsx";
 
 const GET_ACCOUNT_EXTRINSICS = gql`
@@ -61,9 +61,13 @@ export const AccountExtrinsics = () => {
         {loading && <TerminalLoading/>}
         {error && <div>Error: {error.message}</div>}
         {data && <DataTable names={['Block #','Extrinsic Idx', 'Call', 'Account', 'Success']} records={data.extrinsics.nodes.map((extrinsic: { id: string; blockNumber: string; module: string; method: string; args: string; signer: string; success: boolean; }) => {
-          return {id: extrinsic.id, data: [extrinsic.blockNumber, <Link to={`/extrinsic/${extrinsic.id}`}>{extrinsic.id}</Link>, `${extrinsic.module}::${extrinsic.method}`, <ResponsiveAddress address={extrinsic.signer}/>, extrinsic.success.toString()
-            ]}
-        })} />}
+          return {id: extrinsic.id, data: [extrinsic.blockNumber,
+              <Link to={`/extrinsic/${extrinsic.id}`}>{extrinsic.id}</Link>, `${extrinsic.module}::${extrinsic.method}`,
+              <ResponsiveAddress address={extrinsic.signer}/>, extrinsic.success ?
+                  <span style={{color: '#6cffb9'}}>✓</span> : <span style={{color: '#ff6c6c'}}>✗</span>
+            ]
+          }
+        })}/>}
       </TerminalWindow>
   )
 }

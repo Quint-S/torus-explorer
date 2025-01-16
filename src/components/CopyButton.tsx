@@ -22,7 +22,7 @@ const Button = styled.button`
 `;
 
 const Checkmark = styled.span`
-  color: #00ff00;
+  color: #6cffb9;
   margin-left: 4px;
   opacity: 0;
   //transition: opacity 0.1s;

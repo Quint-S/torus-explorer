@@ -94,8 +94,8 @@ export const Sidebar = () => {
         { to: "/agents", label: "Agents" },
         { to: "/transfers", label: "Transfers" },
         { to: "/blocks", label: "Blocks" },
-        { to: "/extrinsics", label: "Extrinsics" },
-        { to: "/events", label: "Events" }
+        // { to: "/extrinsics", label: "Extrinsics" },
+        // { to: "/events", label: "Events" }
     ];
 
     const navItems = determineShortcutKeys(baseNavItems);

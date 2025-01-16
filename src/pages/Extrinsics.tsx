@@ -1,6 +1,6 @@
 import { gql, useQuery } from '@apollo/client'
 import { TerminalWindow } from '../components/TerminalWindow'
-import {useState} from "react";
+import React, {useState} from "react";
 import {TerminalLoading} from "../components/TerminalLoading.tsx";
 import {PaginationControls} from "../components/PaginationControls.tsx";
 import {DataTable} from "../components/DataTable.tsx";
@@ -56,7 +56,8 @@ export const Extrinsics = () => {
         {loading && <TerminalLoading/>}
         {error && <div>Error: {error.message}</div>}
         {data && <DataTable names={['Block #','Extrinsic Idx', 'Call', 'Account', 'Success']} records={data.extrinsics.nodes.map((extrinsic: { id: string; blockNumber: string; module: string; method: string; args: string; signer: string; success: boolean; }) => {
-          return {id: extrinsic.id, data: [extrinsic.blockNumber, <Link to={`/extrinsic/${extrinsic.id}`}>{extrinsic.id}</Link>, `${extrinsic.module}::${extrinsic.method}`, <Link to={`/account/${extrinsic.signer}`}><ResponsiveAddress address={extrinsic.signer}/></Link>, extrinsic.success.toString()
+          return {id: extrinsic.id, data: [<Link to={`/block/${extrinsic.blockNumber}`}>{extrinsic.blockNumber}</Link>, <Link to={`/extrinsic/${extrinsic.id}`}>{extrinsic.id}</Link>, `${extrinsic.module}::${extrinsic.method}`, <Link to={`/account/${extrinsic.signer}`}><ResponsiveAddress address={extrinsic.signer}/></Link>, extrinsic.success ?
+                <span style={{color: '#6cffb9'}}>✓</span> : <span style={{color: '#ff6c6c'}}>✗</span>
             ]}
         })} />}
       </TerminalWindow>
