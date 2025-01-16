@@ -18,7 +18,6 @@ const NavItem = styled(NavLink)<{ $isExpanded: boolean }>`
     padding: ${props => props.$isExpanded ? '8px' : '1px'};
     margin: 4px 0;
     color: #e04bff;
-    text-decoration: none;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -44,21 +43,51 @@ const NavItem = styled(NavLink)<{ $isExpanded: boolean }>`
     }
     
     &.hovered:after {
-        color: #535bf2;
+        color: rgb(125, 225, 253);
         content: ']';
     }
     &.hovered:before {
-        color: #535bf2;
+        color: rgb(125, 225, 253);
         content: '[';
     }
 `
+
+interface NavItemType {
+    to: string;
+    label: string;
+    shortcutKey: string;
+}
 
 export const Sidebar = () => {
     const [focusedIndex, setFocusedIndex] = useState(-1);
     const [isExpanded, setIsExpanded] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-    const navItems = [
+    // Helper function to determine shortcut keys
+    const determineShortcutKeys = (items: { to: string; label: string }[]): NavItemType[] => {
+        const usedKeys = new Set<string>();
+        return items.map(item => {
+            const label = item.label.toLowerCase();
+            let shortcutKey = '';
+            
+            // Try to find first available character
+            for (const char of label) {
+                if (!usedKeys.has(char)) {
+                    shortcutKey = char;
+                    usedKeys.add(char);
+                    break;
+                }
+            }
+            
+            return {
+                to: item.to,
+                label: item.label,
+                shortcutKey
+            };
+        });
+    };
+
+    const baseNavItems = [
         { to: "/", label: "Home" },
         { to: "/accounts", label: "Accounts" },
         { to: "/agents", label: "Agents" },
@@ -67,6 +96,9 @@ export const Sidebar = () => {
         { to: "/extrinsics", label: "Extrinsics" },
         { to: "/events", label: "Events" }
     ];
+
+    const navItems = determineShortcutKeys(baseNavItems);
+
     // Add mobile detection
     useEffect(() => {
         const handleResize = () => {
@@ -80,16 +112,51 @@ export const Sidebar = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    // Global keyboard shortcuts
+    useEffect(() => {
+        const handleGlobalKeyDown = (e: KeyboardEvent) => {
+            // Don't trigger shortcuts if user is typing in an input or textarea
+            if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+                return;
+            }
+
+            if (!isMobile) {
+                const pressedKey = e.key.toLowerCase();
+                const matchingItem = navItems.find(item => item.shortcutKey === pressedKey);
+                if (matchingItem) {
+                    setFocusedIndex(navItems.indexOf(matchingItem));
+                    const link = document.querySelector(`a[href="${matchingItem.to}"]`) as HTMLElement;
+                    link?.click();
+                }
+            }
+        };
+
+        document.addEventListener('keydown', handleGlobalKeyDown);
+        return () => document.removeEventListener('keydown', handleGlobalKeyDown);
+    }, [navItems, isMobile]);
+
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'ArrowDown') {
             setFocusedIndex(prev => (prev + 1) % navItems.length);
         } else if (e.key === 'ArrowUp') {
             setFocusedIndex(prev => (prev - 1 + navItems.length) % navItems.length);
         } else if (e.key === 'Enter') {
-            // setFocusedIndex(-1);
             const link = document.getElementById(`nav-item-${focusedIndex}`);
             link?.click();
         }
+    };
+
+    const renderLabel = (label: string, shortcutKey: string) => {
+        const index = label.toLowerCase().indexOf(shortcutKey);
+        if (index === -1) return label;
+
+        return (
+            <>
+                {label.slice(0, index)}
+                <span style={{color: "aqua"}}>{label.charAt(index)}</span>
+                {label.slice(index + 1)}
+            </>
+        );
     };
 
     return (
@@ -105,10 +172,10 @@ export const Sidebar = () => {
                     onClick={(e) => {if(!isExpanded && isMobile){e.preventDefault()}}}
                     to={item.to}
                     id={`nav-item-${index}`}
-                    className={focusedIndex === index ? `hovered` : ''}
+                    className={focusedIndex === index && ((isMobile && isExpanded) || !isMobile) ? `hovered` : ''}
                     $isExpanded={isExpanded || !isMobile}
                 >
-                    {isMobile && !isExpanded ? item.label : item.label}
+                    {isMobile && !isExpanded ? item.label : renderLabel(item.label, item.shortcutKey)}
                 </NavItem>
             ))}
         </SidebarContainer>

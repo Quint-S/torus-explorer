@@ -90,9 +90,12 @@ const ThreeJsTorus: React.FC = () => {
         transparent: true,
         uniforms: {
             ...grainShader.uniforms,
-            baseColor: { value: new THREE.Vector3(0.0,0.5,0.9)}
+            baseColor: { value: new THREE.Vector3(0.0,0.5,0.9)},
+            // baseColor: { value: new THREE.Vector3(108/255,1,185/255)}
+
         }
     }));
+
     scene.add(torus);
     scene.add(nn);
     nn.translateZ(0.01)
