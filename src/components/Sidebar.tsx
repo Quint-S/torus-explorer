@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react';
 
 const SidebarContainer = styled.div<{ $isExpanded: boolean }>`
@@ -62,6 +62,7 @@ export const Sidebar = () => {
     const [focusedIndex, setFocusedIndex] = useState(-1);
     const [isExpanded, setIsExpanded] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+    const location = useLocation();
 
     // Helper function to determine shortcut keys
     const determineShortcutKeys = (items: { to: string; label: string }[]): NavItemType[] => {
@@ -101,6 +102,8 @@ export const Sidebar = () => {
 
     // Add mobile detection
     useEffect(() => {
+        setFocusedIndex(baseNavItems.findIndex(item => item.to === location.pathname));
+
         const handleResize = () => {
             setIsMobile(window.innerWidth < 768);
             if (window.innerWidth >= 768) {
@@ -148,7 +151,7 @@ export const Sidebar = () => {
 
     const renderLabel = (label: string, shortcutKey: string) => {
         const index = label.toLowerCase().indexOf(shortcutKey);
-        if (index === -1) return label;
+        if (index === -1 || isMobile) return label;
 
         return (
             <>
