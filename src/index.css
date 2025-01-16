@@ -60,7 +60,7 @@
 body {
 
   color: rgb(125, 225, 253);
-  background-color: #111;
+  background-color: rgb(34,31,30);
   /*background: linear-gradient(90deg, #0a0a0a 0%, #111 50%, #0a0a0a 100%);*/
   font-family: pixelfont, monospace;
   text-shadow: 2px 2px 0 #363636;

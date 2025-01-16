@@ -24,8 +24,9 @@ export const ResponsiveAddress = ({ address }: ResponsiveAddressProps) => {
       if (!containerRef.current?.parentElement) return;
       
       const parentWidth = containerRef.current.parentElement.offsetWidth;
+
       const fontWidth = 8*2;
-      const cutoff = (parentWidth-32)/(fontWidth);
+      const cutoff = parentWidth < 80 ? Math.min(2, (address.length-2)/2) : (parentWidth-32)/(fontWidth);
 
       if(cutoff < address.length/2){
         setFormattedAddress(`${address.slice(0, cutoff)}..${address.slice(-cutoff)}`);

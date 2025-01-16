@@ -23,7 +23,7 @@ account(id: $address) {
 
 export const DetailRow = styled.div`
   display: flex;
-  padding: 8px 0;
+  padding: 1px 0;
   border-bottom: 1px solid #0050a1;
 
 

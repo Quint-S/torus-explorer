@@ -21,7 +21,7 @@ export const DataTable = ({ names, records }: TableProps) => {
             {names.map((name, index) => (
               <th
                 key={index}
-                className="py-3 text-center text-sm font-medium text-gray-400 uppercase tracking-wider px-10"
+                className="py-2 text-center text-gray-400 uppercase"
               >
                 {name}
               </th>
@@ -34,7 +34,7 @@ export const DataTable = ({ names, records }: TableProps) => {
               {record.data.map((data, index) => (
                 <td
                   key={index}
-                  className="px-1 text-sm text-center"
+                  className="px-1 text-center"
                 >
                   {data}
                 </td>
