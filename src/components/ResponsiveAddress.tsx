@@ -48,14 +48,14 @@ export const ResponsiveAddress = ({ address }: ResponsiveAddressProps) => {
   }, [address, displayName]);
 
   return (
-    <div 
-      style={{width: '100%'}}
+    <div
+      style={{background: 'inherit'}}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <span ref={containerRef}>
         {!isHovered ? formattedAddress : (displayName || formattedAddress)}
       </span>
-    </div>
+     </div>
   );
 };

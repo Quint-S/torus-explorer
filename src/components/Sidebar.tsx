@@ -39,7 +39,6 @@ const NavItem = styled(NavLink)<{ $isExpanded: boolean }>`
 
     &.hovered {
         translate: -8px;
-
     }
     
     &.hovered:after {
@@ -137,17 +136,17 @@ export const Sidebar = () => {
         document.addEventListener('keydown', handleGlobalKeyDown);
         return () => document.removeEventListener('keydown', handleGlobalKeyDown);
     }, [navItems, isMobile]);
-
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === 'ArrowDown') {
-            setFocusedIndex(prev => (prev + 1) % navItems.length);
-        } else if (e.key === 'ArrowUp') {
-            setFocusedIndex(prev => (prev - 1 + navItems.length) % navItems.length);
-        } else if (e.key === 'Enter') {
-            const link = document.getElementById(`nav-item-${focusedIndex}`);
-            link?.click();
-        }
-    };
+    //
+    // const handleKeyDown = (e: React.KeyboardEvent) => {
+    //     if (e.key === 'ArrowDown') {
+    //         setFocusedIndex(prev => (prev + 1) % navItems.length);
+    //     } else if (e.key === 'ArrowUp') {
+    //         setFocusedIndex(prev => (prev - 1 + navItems.length) % navItems.length);
+    //     } else if (e.key === 'Enter') {
+    //         const link = document.getElementById(`nav-item-${focusedIndex}`);
+    //         link?.click();
+    //     }
+    // };
 
     const renderLabel = (label: string, shortcutKey: string) => {
         const index = label.toLowerCase().indexOf(shortcutKey);
@@ -164,7 +163,6 @@ export const Sidebar = () => {
 
     return (
         <SidebarContainer
-            onKeyDown={handleKeyDown}
             tabIndex={0}
             $isExpanded={isExpanded || !isMobile}
             onClick={() => isMobile && setIsExpanded(!isExpanded)}
