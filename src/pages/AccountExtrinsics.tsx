@@ -4,7 +4,7 @@ import {Link, useParams} from 'react-router-dom'
 import { TerminalLoading } from '../components/TerminalLoading.tsx'
 import {DataTable} from "../components/DataTable.tsx";
 import {ResponsiveAddress} from "../components/ResponsiveAddress.tsx";
-import React, {useState} from "react";
+import {useState} from "react";
 import {PaginationControls} from "../components/PaginationControls.tsx";
 
 const GET_ACCOUNT_EXTRINSICS = gql`

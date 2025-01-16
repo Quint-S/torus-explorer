@@ -1,6 +1,6 @@
 import { gql, useQuery } from '@apollo/client'
 import { TerminalWindow } from '../components/TerminalWindow'
-import React, {useState} from "react";
+import {useState} from "react";
 import {TerminalLoading} from "../components/TerminalLoading.tsx";
 import {PaginationControls} from "../components/PaginationControls.tsx";
 import {DataTable} from "../components/DataTable.tsx";
