@@ -8,6 +8,7 @@ import { DetailValue } from './AccountDetails.tsx'
 import { DetailLabel } from './AccountDetails.tsx'
 import { DetailRow } from './AccountDetails.tsx'
 import { ExtrinsicEvents } from './ExtrinsicEvents.tsx';
+import { Helmet } from 'react-helmet-async';
 
 export const GET_EXTRINSIC = gql`
   query GetExtrinsic($id: String!) {
@@ -62,8 +63,29 @@ export const ExtrinsicDetails = () => {
     return <div>Error: No extrinsic ID provided</div>
   }
 
+  const title = extrinsic ? `Extrinsic ${extrinsic.module}::${extrinsic.method} | Torus Explorer` : 'Extrinsic Details | Torus Explorer';
+  const description = extrinsic 
+    ? `Extrinsic ${extrinsic.id} - ${extrinsic.module}::${extrinsic.method} called by ${extrinsic.signer} - Status: ${extrinsic.success ? 'Success' : 'Failed'}`
+    : 'View extrinsic details on Torus Explorer';
+
   return (
-    <TerminalWindow title={`view_extrinsic`}>
+    <>
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:type" content="website" />
+        {extrinsic && (
+          <>
+            <meta property="og:url" content={window.location.href} />
+            <meta name="twitter:card" content="summary" />
+            <meta name="twitter:title" content={title} />
+            <meta name="twitter:description" content={description} />
+          </>
+        )}
+      </Helmet>
+      <TerminalWindow title={`view_extrinsic`}>
       {loading && <TerminalLoading />}
       {error && <div>Error: {error.message}</div>}
       {!loading && !data && <div>Error: Extrinsic {id} not found.</div>}
@@ -115,5 +137,6 @@ export const ExtrinsicDetails = () => {
 
 
     </TerminalWindow>
+    </>
   )
 }

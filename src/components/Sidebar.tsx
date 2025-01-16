@@ -172,7 +172,12 @@ export const Sidebar = () => {
             {navItems.map((item, index) => (
                 <NavItem
                     key={item.to}
-                    onClick={(e) => {if(!isExpanded && isMobile){e.preventDefault()}}}
+                    onClick={(e) => {
+                        if(!isExpanded && isMobile){
+                            e.preventDefault()
+                        }
+                        setFocusedIndex(index);
+                    }}
                     to={item.to}
                     id={`nav-item-${index}`}
                     className={focusedIndex === index && ((isMobile && isExpanded) || !isMobile) ? `hovered` : ''}

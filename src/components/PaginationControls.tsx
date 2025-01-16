@@ -54,7 +54,7 @@ const handlePageChange = (e: React.KeyboardEvent<HTMLInputElement>) => {
   value={inputValue}
   onChange={handleInputChange}
   onKeyDown={handlePageChange}
-  className="w-12 mx-1 text-center bg-transparent border border-gray-400 focus:outline-none appearance-none"
+  className="w-12 mx-1 text-center bg-transparent border border-gray-400 rounded-none focus:outline-none appearance-none"
   style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
 />
         <span>of {totalPages}</span>

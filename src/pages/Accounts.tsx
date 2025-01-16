@@ -8,6 +8,7 @@ import { TerminalLoading } from '../components/TerminalLoading.tsx';
 import {Link, useNavigate} from "react-router-dom";
 import {ResponsiveAddress} from "../components/ResponsiveAddress.tsx";
 import {SearchBar} from "../components/SearchBar.tsx";
+import { Helmet } from 'react-helmet-async';
 
 const GET_ACCOUNTS = gql`
   query GetAccounts($first: Int!, $offset: Int!) {
@@ -31,6 +32,12 @@ export const Accounts = () => {
     const { loading, error, data } = useQuery(GET_ACCOUNTS, {
       variables: { first: itemsPerPage, offset: currentPage * itemsPerPage }
     });
+
+    const title = 'Accounts | TorEx - Torus Blockchain Explorer';
+    const description = data 
+      ? `Browse ${data.accounts.totalCount.toLocaleString()} accounts on the Torus blockchain - View balances, transfers, and account details`
+      : 'Browse accounts on the Torus blockchain - View balances, transfers, and account details';
+
     const onsearch = (search: string) => {
         navigate(`/account/${search}`)
     }
@@ -49,27 +56,40 @@ export const Accounts = () => {
     const navigate = useNavigate();
 
     return (
-        <TerminalWindow title="Accounts" footer={pageControls}>
-          {loading && <TerminalLoading/>}
-          {error && <div>Error: {error.message}</div>}
+        <>
+          <Helmet>
+            <title>{title}</title>
+            <meta name="description" content={description} />
+            <meta property="og:title" content={title} />
+            <meta property="og:description" content={description} />
+            <meta property="og:type" content="website" />
+            <meta property="og:url" content={window.location.href} />
+            <meta name="twitter:card" content="summary" />
+            <meta name="twitter:title" content={title} />
+            <meta name="twitter:description" content={description} />
+          </Helmet>
+          <TerminalWindow title="Accounts" footer={pageControls}>
+            {loading && <TerminalLoading/>}
+            {error && <div>Error: {error.message}</div>}
 
-          {data && (
-              <div >
-                <DataTable
-                    names={['Address', 'Total Balance', 'Free', 'Staked']}
-                    records={data.accounts.nodes.map((acc: { id: string; address: string; balanceTotal: number; balanceFree: number; balanceStaked: number; }) => ({
-                      id: acc.id,
-                      data: [
-                          <Link to={`/account/${acc.address}`}><ResponsiveAddress address={acc.address}/></Link>,
-                        formatTORUS(acc.balanceTotal),
-                        formatTORUS(acc.balanceFree),
-                        formatTORUS(acc.balanceStaked)
-                      ]
-                    }))}
-                />
-              </div>
-              
-          )}
-        </TerminalWindow>
+            {data && (
+                <div >
+                  <DataTable
+                      names={['Address', 'Total Balance', 'Free', 'Staked']}
+                      records={data.accounts.nodes.map((acc: { id: string; address: string; balanceTotal: number; balanceFree: number; balanceStaked: number; }) => ({
+                        id: acc.id,
+                        data: [
+                            <Link to={`/account/${acc.address}`}><ResponsiveAddress address={acc.address}/></Link>,
+                          formatTORUS(acc.balanceTotal),
+                          formatTORUS(acc.balanceFree),
+                          formatTORUS(acc.balanceStaked)
+                        ]
+                      }))}
+                  />
+                </div>
+                
+            )}
+          </TerminalWindow>
+        </>
     );
 };
