@@ -11,37 +11,40 @@ import ThreeJsTorus from './components/ThreeJsTorus'
 import { AccountDetails } from './pages/AccountDetails'
 import { I3StatusBar } from './components/I3StatusBar'
 import {ExtrinsicDetails} from "./pages/ExtrinsicDetails.tsx";
+import { HelmetProvider } from 'react-helmet-async';
 
 const App = () => {
   return (
-    <Router>
-      <ThreeJsTorus />
-      <div style={{ 
-        display: 'flex', 
-        width: '100vw', 
-        height: '100vh', 
-        padding: '10px', 
-        paddingBottom: '40px',
-        backgroundColor: 'rgba(0,0,0,30%)', 
-        backgroundClip: 'content-box',
-        position: 'relative',
-        overflow: 'auto'
-      }}>
-      <I3StatusBar />
-        <Sidebar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/blocks" element={<Blocks />} />
-          <Route path="/transfers" element={<Transfers />} />
-          <Route path="/accounts" element={<Accounts />} />
-          <Route path="/agents" element={<Agents />} />
-          <Route path="/extrinsics" element={<Extrinsics />} />
-          <Route path="/events" element={<Events />} />
-          <Route path="/account/:address" element={ <AccountDetails />} />
-          <Route path="/extrinsic/:id" element={ <ExtrinsicDetails />} />
-        </Routes>
-      </div>
-    </Router>
+    <HelmetProvider>
+      <Router>
+        <ThreeJsTorus />
+        <div style={{ 
+          display: 'flex', 
+          width: '100vw', 
+          height: '100vh', 
+          padding: '10px', 
+          paddingBottom: '40px',
+          backgroundColor: 'rgba(0,0,0,30%)', 
+          backgroundClip: 'content-box',
+          position: 'relative',
+          overflow: 'auto'
+        }}>
+        <I3StatusBar />
+          <Sidebar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/blocks" element={<Blocks />} />
+            <Route path="/transfers" element={<Transfers />} />
+            <Route path="/accounts" element={<Accounts />} />
+            <Route path="/agents" element={<Agents />} />
+            <Route path="/extrinsics" element={<Extrinsics />} />
+            <Route path="/events" element={<Events />} />
+            <Route path="/account/:address" element={ <AccountDetails />} />
+            <Route path="/extrinsic/:id" element={ <ExtrinsicDetails />} />
+          </Routes>
+        </div>
+      </Router>
+    </HelmetProvider>
   )
 }
 

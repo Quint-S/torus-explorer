@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import {AccountTransfers} from "./AccountTransfers.tsx";
 import {AccountExtrinsics} from "./AccountExtrinsics.tsx";
 import {CopyButton} from "../components/CopyButton.tsx";
+import { Helmet } from 'react-helmet-async';
 
 const GET_ACCOUNT = gql`
   query GetAccount($address: String!) {
@@ -55,58 +56,72 @@ export const AccountDetails = () => {
     return <div>Error: No address provided</div>
   }
 
+  const accountData = data?.account;
+  const title = accountData ? `Account ${address.slice(0, 8)}... | Torus Explorer` : 'Account Details | Torus Explorer';
+  const description = accountData 
+    ? `Account ${address} with total balance of ${formatTORUS(accountData.balanceTotal)} TORUS`
+    : 'View account details on Torus Explorer';
+
   return (
-      <TerminalWindow title={`view_account`}>
-        {loading && <TerminalLoading />}
-        {error && <div>Error: {error.message}</div>}
-        {!loading && !data?.account && <div>Error: {address} not found.</div>}
-        {data?.account && (
-            <div>
-              <DetailRow>
-                <DetailLabel>Address:</DetailLabel>
-                <DetailValue>{data.account.id} <CopyButton textToCopy={data.account.id}/></DetailValue>
-              </DetailRow>
-              <DetailRow>
-                <DetailLabel>Total Balance:</DetailLabel>
-                <DetailValue>{formatTORUS(data.account.balanceTotal)}</DetailValue>
-              </DetailRow>
-              <DetailRow>
-                <DetailLabel>Free Balance:</DetailLabel>
-                <DetailValue>{formatTORUS(data.account.balanceFree)}</DetailValue>
-              </DetailRow>
-              <DetailRow>
-                <DetailLabel>Staked Balance:</DetailLabel>
-                <DetailValue>{formatTORUS(data.account.balanceStaked)}</DetailValue>
-              </DetailRow>
-            </div>
-        )}
+      <>
+        <Helmet>
+          <title>{title}</title>
+          <meta name="description" content={description} />
+          <meta property="og:title" content={title} />
+          <meta property="og:description" content={description} />
+          <meta property="og:type" content="website" />
+          {accountData && (
+            <>
+              <meta property="og:url" content={window.location.href} />
+              <meta name="twitter:card" content="summary" />
+              <meta name="twitter:title" content={title} />
+              <meta name="twitter:description" content={description} />
+            </>
+          )}
+        </Helmet>
+        <TerminalWindow title={`view_account`}>
+          {loading && <TerminalLoading />}
+          {error && <div>Error: {error.message}</div>}
+          {!loading && !data?.account && <div>Error: {address} not found.</div>}
+          {data?.account && (
+              <div>
+                <DetailRow>
+                  <DetailLabel>Address:</DetailLabel>
+                  <DetailValue>{data.account.id} <CopyButton textToCopy={data.account.id}/></DetailValue>
+                </DetailRow>
+                <DetailRow>
+                  <DetailLabel>Total Balance:</DetailLabel>
+                  <DetailValue>{formatTORUS(data.account.balanceTotal)}</DetailValue>
+                </DetailRow>
+                <DetailRow>
+                  <DetailLabel>Free Balance:</DetailLabel>
+                  <DetailValue>{formatTORUS(data.account.balanceFree)}</DetailValue>
+                </DetailRow>
+                <DetailRow>
+                  <DetailLabel>Staked Balance:</DetailLabel>
+                  <DetailValue>{formatTORUS(data.account.balanceStaked)}</DetailValue>
+                </DetailRow>
+              </div>
+          )}
 
-        <TerminalTabs
-            tabs={[
-              {
-                label: 'Transfers',
-                content: <AccountTransfers />
-              },
-              {
-                label: 'Extrinsics',
-                content: <AccountExtrinsics/>
-              },
-              {
-                label: 'Delegations',
-                content: <div>Coming soon..</div>
-              }
-            ]}
-        />
+          <TerminalTabs
+              tabs={[
+                {
+                  label: 'Transfers',
+                  content: <AccountTransfers />
+                },
+                {
+                  label: 'Extrinsics',
+                  content: <AccountExtrinsics/>
+                },
+                {
+                  label: 'Delegations',
+                  content: <div>Coming soon..</div>
+                }
+              ]}
+          />
 
-        {/*<AccountTransfers />*/}
-        {/*{(data?.transfers?.totalCount ?? 0) > 0 && (*/}
-        {/*    <div style={{padding: '8px 0',*/}
-        {/*      borderTop: '1px solid #0050a1'}}>*/}
-        {/*    <DataTable names={['Amount', 'From', 'To', 'Height', 'Timestamp']} records={data.transfers.nodes.map((transfer: { id: string; amount: number; from: string; to: string; blockNumber: string; timestamp: string | number | Date }) => {*/}
-        {/*      return {id: transfer.id, data: [formatTORUS(transfer.amount), <Link to={`/account/${transfer.from}`}><ResponsiveAddress address={transfer.from}/></Link>, <Link to={`/account/${transfer.to}`}><ResponsiveAddress address={transfer.to}/></Link>, transfer.blockNumber, new Date(transfer.timestamp).toLocaleString()*/}
-        {/*        ]}*/}
-        {/*    })} /></div>*/}
-        {/*)}*/}
-      </TerminalWindow>
+        </TerminalWindow>
+      </>
   )
 }
