@@ -61,7 +61,7 @@ export const AccountExtrinsics = () => {
         {loading && <TerminalLoading/>}
         {error && <div>Error: {error.message}</div>}
         {data && <DataTable names={['Block #','Extrinsic Idx', 'Call', 'Account', 'Success']} records={data.extrinsics.nodes.map((extrinsic: { id: string; blockNumber: string; module: string; method: string; args: string; signer: string; success: boolean; }) => {
-          return {id: extrinsic.id, data: [extrinsic.blockNumber,
+          return {id: extrinsic.id, data: [<Link to={`/block/${extrinsic.blockNumber}`}>{extrinsic.blockNumber}</Link>,
               <Link to={`/extrinsic/${extrinsic.id}`}>{extrinsic.id}</Link>, `${extrinsic.module}::${extrinsic.method}`,
               <ResponsiveAddress address={extrinsic.signer}/>, extrinsic.success ?
                   <span style={{color: '#6cffb9'}}>✓</span> : <span style={{color: '#ff6c6c'}}>✗</span>

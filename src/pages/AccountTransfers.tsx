@@ -67,7 +67,7 @@ export const AccountTransfers = () => {
               const formattedFrom = <ResponsiveAddress address={transfer.from}/>;
               const formattedTo = <ResponsiveAddress address={transfer.to}/>;
 
-              return {id: transfer.id, data: [formatTORUS(transfer.amount), transfer.from === address ? formattedFrom : <Link to={`/account/${transfer.from}`}>{formattedFrom}</Link>, transfer.to === address ? formattedTo : <Link to={`/account/${transfer.to}`}><ResponsiveAddress address={transfer.to}/></Link>, transfer.blockNumber, new Date(transfer.timestamp).toLocaleString()
+              return {id: transfer.id, data: [formatTORUS(transfer.amount), transfer.from === address ? formattedFrom : <Link to={`/account/${transfer.from}`}>{formattedFrom}</Link>, transfer.to === address ? formattedTo : <Link to={`/account/${transfer.to}`}><ResponsiveAddress address={transfer.to}/></Link>, <Link to={`/block/${transfer.blockNumber}`}>{transfer.blockNumber}</Link>, new Date(transfer.timestamp).toLocaleString()
                 ]}
             })} /></div>
         )}

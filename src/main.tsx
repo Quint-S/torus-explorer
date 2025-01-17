@@ -7,7 +7,7 @@ import './index.css';  // Add this line
 
 
 const client = new ApolloClient({
-  uri: 'https://api.subquery.network/sq/torus-explorer/torus-indexer',
+  uri: 'https://api.subquery.network/sq/CommuneExplorer/torus-indexer',
   cache: new InMemoryCache(),
 })
 
