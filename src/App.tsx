@@ -24,6 +24,7 @@ const AppContent = () => {
       <ThreeJsTorus />
       <div style={{ 
         display: 'flex', 
+        flexDirection: 'column',
         width: '100vw', 
         height: '100vh', 
         padding: '10px', 
@@ -33,20 +34,22 @@ const AppContent = () => {
         position: 'relative',
         overflow: 'auto'
       }}>
-      <I3StatusBar />
+        <I3StatusBar />
         <Sidebar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/blocks" element={<Blocks />} />
-          <Route path="/transfers" element={<Transfers />} />
-          <Route path="/accounts" element={<Accounts />} />
-          <Route path="/agents" element={<Agents />} />
-          <Route path="/extrinsics" element={<Extrinsics />} />
-          <Route path="/events" element={<Events />} />
-          <Route path="/account/:address" element={ <AccountDetails />} />
-          <Route path="/extrinsic/:id" element={ <ExtrinsicDetails />} />
-          <Route path="/block/:height" element={ <BlockDetails />} />
-        </Routes>
+        <div style={{ flex: 1, overflow: 'auto' }}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/blocks" element={<Blocks />} />
+            <Route path="/transfers" element={<Transfers />} />
+            <Route path="/accounts" element={<Accounts />} />
+            <Route path="/agents" element={<Agents />} />
+            <Route path="/extrinsics" element={<Extrinsics />} />
+            <Route path="/events" element={<Events />} />
+            <Route path="/account/:address" element={ <AccountDetails />} />
+            <Route path="/extrinsic/:id" element={ <ExtrinsicDetails />} />
+            <Route path="/block/:height" element={ <BlockDetails />} />
+          </Routes>
+        </div>
       </div>
     </>
   );

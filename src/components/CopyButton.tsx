@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const Button = styled.button`
-    background: none;
     border: none;
     cursor: pointer;
     padding: 0;
@@ -11,10 +10,12 @@ const Button = styled.button`
     align-items: center;
     transition: all 0.2s;
     text-shadow: 2px 2px 0 #363636;
-
     //&:hover {
     //    opacity: 0.8;
     //}
+    &.terminal-cursor {
+        text-shadow: none;
+    }
     //
     //&:active {
     //    transform: scale(0.95);

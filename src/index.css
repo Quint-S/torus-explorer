@@ -98,8 +98,10 @@ pre {
   text-indent: initial
 }
 
-.tab-selected {
-  background-color: rgba(59, 130, 246, 0.1);
+.terminal-cursor {
+  background-color: rgba(0, 170, 0, 0.9);
+  text-shadow: none;
+  color: black;
 }
 
 #ascii-logo pre {

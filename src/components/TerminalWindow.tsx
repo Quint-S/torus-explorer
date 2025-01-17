@@ -63,6 +63,13 @@ interface Tab {
     color: ${({ active }) => active ? '#fff' : '#00c4ff'};
     cursor: pointer;
     transition: all 0.1s;
+      
+      &.terminal-cursor {
+          background-color: rgba(0, 170, 0, 0.9);
+          text-shadow: none;
+          color: black;
+      }
+      
   
     &:hover {
       background-color: #0050a1;

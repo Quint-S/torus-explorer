@@ -1,45 +1,49 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
+type ClickableElement = HTMLAnchorElement | HTMLButtonElement;
+
 export const useKeyboardNavigation = () => {
     const [currentIndex, setCurrentIndex] = useState<number>(-1);
-    const [links, setLinks] = useState<HTMLAnchorElement[]>([]);
+    const [clickableElements, setClickableElements] = useState<ClickableElement[]>([]);
     const location = useLocation();
 
     // Reset navigation when route changes
     useEffect(() => {
-        setCurrentIndex(-1);
+        // setCurrentIndex(-1);
         // Small delay to let the new page render
         setTimeout(() => {
-            const newLinks = getAllVisibleLinks();
-            setLinks(newLinks);
+            const newElements = getAllClickableElements();
+            setClickableElements(newElements);
         }, 100);
     }, [location]);
 
-    const getAllVisibleLinks = () => {
-        // Get all <a> elements
-        const allLinks = Array.from(document.getElementsByTagName('a'));//Array.from([...Array.from(document.getElementsByTagName('a')), ...Array.from(document.getElementsByTagName('button'))]);
+    const getAllClickableElements = () => {
+        // Get all <a> and <button> elements using a single query
+        const allElements = Array.from(document.querySelectorAll('a, button')) as ClickableElement[];
         
-        // Filter for actually clickable links
-        return allLinks.filter(link => {
+        // Filter for actually clickable elements
+        const visibleElements = allElements.filter(element => {
             // Get computed style
-            const style = window.getComputedStyle(link);
-            const rect = link.getBoundingClientRect();
+            const style = window.getComputedStyle(element);
+            const rect = element.getBoundingClientRect();
             
-            // Check if the link is visible and clickable
+            // Check if the element is visible and clickable
             const isVisible = style.display !== 'none' && 
                             style.visibility !== 'hidden' && 
                             style.opacity !== '0' &&
                             rect.width > 0 && 
                             rect.height > 0;
 
-            // Check if it's an actual clickable link
-            const isClickable = link.hasAttribute('href') && 
-                              !link.getAttribute('href')?.startsWith('#') &&
-                              !link.getAttribute('aria-hidden');
+            // Check if it's a clickable link or button
+            const isClickable = element instanceof HTMLAnchorElement ? 
+                              (element.hasAttribute('href') && 
+                               !element.getAttribute('href')?.startsWith('#') &&
+                               !element.getAttribute('aria-hidden')) :
+                              !element.disabled && !element.getAttribute('aria-hidden');
 
             // Check if any parent is hidden
-            let parent = link.parentElement;
+            let parent = element.parentElement;
             while (parent) {
                 const parentStyle = window.getComputedStyle(parent);
                 if (parentStyle.display === 'none' || 
@@ -50,39 +54,66 @@ export const useKeyboardNavigation = () => {
                 parent = parent.parentElement;
             }
 
-            // Check if this link is the actual target (not a parent of another link)
-            const hasNestedLinks = link.getElementsByTagName('a').length > 0;
+            // Check if this element is the actual target (not a parent of another clickable element)
+            const hasNestedElements = 
+                element.getElementsByTagName('a').length > 0 ||
+                element.getElementsByTagName('button').length > 0;
 
-            return isVisible && isClickable && !hasNestedLinks;
+            return isVisible && isClickable && !hasNestedElements;
         });
+
+        // Sort elements by their position in the document
+        return visibleElements;
+        // .sort((a, b) => {
+        //     const aRect = a.getBoundingClientRect();
+        //     const bRect = b.getBoundingClientRect();
+        //
+        //     // First compare by vertical position (top to bottom)
+        //     if (Math.abs(aRect.top - bRect.top) > 5) { // 5px threshold for same line
+        //         return aRect.top - bRect.top;
+        //     }
+        //     // If on same line, compare by horizontal position (left to right)
+        //     return aRect.left - bRect.left;
+        // });
     };
 
     useEffect(() => {
-        // Update links when DOM changes
-        const updateLinks = () => {
-            const newLinks = getAllVisibleLinks();
-            if (JSON.stringify(newLinks.map(l => l.href)) !== JSON.stringify(links.map(l => l.href))) {
-                setLinks(newLinks);
+        // Update elements when DOM changes
+        const updateElements = () => {
+            const newElements = getAllClickableElements();
+            const currentElements = JSON.stringify(newElements.map(el => ({
+                type: el instanceof HTMLAnchorElement ? 'a' : 'button',
+                id: el instanceof HTMLAnchorElement ? el.href : el.textContent,
+                rect: el.getBoundingClientRect().toJSON()
+            })));
+            const oldElements = JSON.stringify(clickableElements.map(el => ({
+                type: el instanceof HTMLAnchorElement ? 'a' : 'button',
+                id: el instanceof HTMLAnchorElement ? el.href : el.textContent,
+                rect: el.getBoundingClientRect().toJSON()
+            })));
+
+            if (currentElements !== oldElements) {
+                setClickableElements(newElements);
                 // Reset index if current index is invalid
-                if (currentIndex >= newLinks.length) {
+                if (currentIndex >= newElements.length) {
                     setCurrentIndex(-1);
                 }
             }
         };
 
-        // Initial links collection
-        updateLinks();
+        // Initial elements collection
+        updateElements();
 
         // Set up mutation observer to watch for DOM changes
         const observer = new MutationObserver(() => {
-            requestAnimationFrame(updateLinks);
+            requestAnimationFrame(updateElements);
         });
         
         observer.observe(document.body, {
             childList: true,
             subtree: true,
             attributes: true,
-            attributeFilter: ['style', 'class', 'href']
+            attributeFilter: ['style', 'class', 'href', 'disabled']
         });
 
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -91,37 +122,37 @@ export const useKeyboardNavigation = () => {
                 return;
             }
 
-            // Get fresh list of links
-            const currentLinks = getAllVisibleLinks();
+            // Get fresh list of elements
+            const currentElements = getAllClickableElements();
             
             switch (e.key) {
                 case 'ArrowDown':
                 case 'ArrowRight': {
-                    if (currentLinks.length === 0) return;
+                    if (currentElements.length === 0) return;
                     
                     e.preventDefault();
                     setCurrentIndex(prev => {
                         const next = prev + 1;
-                        return next >= currentLinks.length ? 0 : next;
+                        return next >= currentElements.length ? 0 : next;
                     });
-                    setLinks(currentLinks);
+                    setClickableElements(currentElements);
                     break;
                 }
                 case 'ArrowUp':
                 case 'ArrowLeft': {
-                    if (currentLinks.length === 0) return;
+                    if (currentElements.length === 0) return;
                     
                     e.preventDefault();
                     setCurrentIndex(prev => {
                         const next = prev - 1;
-                        return next < 0 ? currentLinks.length - 1 : next;
+                        return next < 0 ? currentElements.length - 1 : next;
                     });
-                    setLinks(currentLinks);
+                    setClickableElements(currentElements);
                     break;
                 }
                 case 'Enter':
-                    if (currentIndex >= 0 && currentIndex < currentLinks.length) {
-                        currentLinks[currentIndex].click();
+                    if (currentIndex >= 0 && currentIndex < currentElements.length) {
+                        currentElements[currentIndex].click();
                     }
                     break;
             }
@@ -133,21 +164,24 @@ export const useKeyboardNavigation = () => {
             window.removeEventListener('keydown', handleKeyDown);
             observer.disconnect();
         };
-    }, [currentIndex, links]);
+    }, [currentIndex, clickableElements]);
 
     // Effect to handle focus and styling
     useEffect(() => {
-        // Remove previous highlights
-        document.querySelectorAll('a').forEach(link => {
-            link.style.background = '';
+        // Remove previous highlights and classes
+        const elements = document.querySelectorAll('a, button');
+        elements.forEach(element => {
+            if (element instanceof HTMLElement) {
+                element.classList.remove('terminal-cursor');
+            }
         });
 
-        if (currentIndex >= 0 && currentIndex < links.length) {
-            const currentLink = links[currentIndex];
-            currentLink.style.background = 'rgba(0,255,0,0.7)';
-            currentLink.scrollIntoView({ behavior: 'instant', block: 'nearest' });
+        if (currentIndex >= 0 && currentIndex < clickableElements.length) {
+            const currentElement = clickableElements[currentIndex];
+            currentElement.classList.add('terminal-cursor');
+            currentElement.scrollIntoView({ behavior: 'instant', block: 'nearest' });
         }
-    }, [currentIndex, links]);
+    }, [currentIndex, clickableElements]);
 
     return { currentIndex };
 }; 
