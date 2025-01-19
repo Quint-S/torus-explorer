@@ -9,6 +9,7 @@ import { DetailLabel } from './AccountDetails.tsx'
 import { DetailRow } from './AccountDetails.tsx'
 import { ExtrinsicEvents } from './ExtrinsicEvents.tsx';
 import { Helmet } from 'react-helmet-async';
+import {EthereumTransfer} from "../components/extrinsics/EthereumTransfer.tsx";
 
 export const GET_EXTRINSIC = gql`
   query GetExtrinsic($id: String!) {
@@ -31,22 +32,24 @@ export const GET_EXTRINSIC = gql`
 export const GET_EXTRINSIC_BY_HASH = gql`
   query GetExtrinsic($id: String!) {
     extrinsics(first: 1, filter: {hash: {equalTo: $id}}) {
-    nodes{
-      id
-      module
-      method
-      blockNumber
-      extrinsicId
-      tip
-      version
-      signer
-      success
-      hash
-      args
+      nodes{
+        id
+        module
+        method
+        blockNumber
+        extrinsicId
+        tip
+        version
+        signer
+        success
+        hash
+        args
       }
     }
   }
 `
+
+
 
 
 export const ExtrinsicDetails = () => {
@@ -107,6 +110,7 @@ export const ExtrinsicDetails = () => {
             <DetailLabel>Method:</DetailLabel>
             <DetailValue>{extrinsic.method}</DetailValue>
           </DetailRow>
+          {extrinsic.module === 'ethereum' && <EthereumTransfer extrinsicId={extrinsic.id} />}
           <DetailRow>
             <DetailLabel>Signer:</DetailLabel>
             <DetailValue>{extrinsic.signer} <CopyButton textToCopy={extrinsic.signer}/></DetailValue>
@@ -123,6 +127,7 @@ export const ExtrinsicDetails = () => {
             <DetailLabel>Arguments:</DetailLabel>
             <DetailValue>{extrinsic.args}</DetailValue>
           </DetailRow>
+
             <TerminalTabs
                 tabs={[
                     {

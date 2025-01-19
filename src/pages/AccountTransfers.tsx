@@ -53,6 +53,7 @@ export const AccountTransfers = () => {
   if (!address) {
     return <div>Error: No address provided</div>
   }
+  const formattedNumber = (num: number) => num < 10 ? `000${num}` : num < 100 ? `00${num}` : num < 1000 ? `0${num}` : `${num}`;
 
   return (
       <TerminalWindow title={`account_transfers`} footer={pageControls}>
@@ -63,11 +64,13 @@ export const AccountTransfers = () => {
         {(data?.transfers?.totalCount ?? 0) > 0 && (
             <div style={{padding: '8px 0',
               borderTop: '1px solid #0050a1'}}>
-            <DataTable names={['Amount', 'From', 'To', 'Height', 'Timestamp']} records={data.transfers.nodes.map((transfer: { id: string; amount: number; from: string; to: string; blockNumber: string; timestamp: string | number | Date }) => {
+            <DataTable names={['Amount', 'From', 'To', 'Height', 'Timestamp']} records={data.transfers.nodes.map((transfer: {
+              extrinsicId: number;
+              id: string; amount: number; from: string; to: string; blockNumber: string; timestamp: string | number | Date }) => {
               const formattedFrom = <ResponsiveAddress address={transfer.from}/>;
               const formattedTo = <ResponsiveAddress address={transfer.to}/>;
 
-              return {id: transfer.id, data: [formatTORUS(transfer.amount), transfer.from === address ? formattedFrom : <Link to={`/account/${transfer.from}`}>{formattedFrom}</Link>, transfer.to === address ? formattedTo : <Link to={`/account/${transfer.to}`}><ResponsiveAddress address={transfer.to}/></Link>, <Link to={`/block/${transfer.blockNumber}`}>{transfer.blockNumber}</Link>, new Date(transfer.timestamp).toLocaleString()
+              return {id: transfer.id, data: [formatTORUS(transfer.amount), transfer.from === address ? formattedFrom : <Link to={`/account/${transfer.from}`}>{formattedFrom}</Link>, transfer.to === address ? formattedTo : <Link to={`/account/${transfer.to}`}><ResponsiveAddress address={transfer.to}/></Link>, <Link to={`/extrinsic/${transfer.blockNumber}-${formattedNumber(transfer.extrinsicId)}`}>{transfer.blockNumber}-{transfer.extrinsicId}</Link>, new Date(transfer.timestamp).toLocaleString()
                 ]}
             })} /></div>
         )}
