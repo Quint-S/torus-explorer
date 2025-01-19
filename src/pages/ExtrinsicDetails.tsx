@@ -9,7 +9,6 @@ import { DetailLabel } from './AccountDetails.tsx'
 import { DetailRow } from './AccountDetails.tsx'
 import { ExtrinsicEvents } from './ExtrinsicEvents.tsx';
 import { Helmet } from 'react-helmet-async';
-import {EthereumTransfer} from "../components/extrinsics/EthereumTransfer.tsx";
 
 export const GET_EXTRINSIC = gql`
   query GetExtrinsic($id: String!) {

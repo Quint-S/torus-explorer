@@ -1,7 +1,7 @@
 import { gql, useQuery } from '@apollo/client'
 import React from "react";
 import {TerminalLoading} from "../TerminalLoading.tsx";
-import {DetailLabel, DetailRow, DetailValue} from "../../pages/AccountDetails.tsx";
+import { DetailRow} from "../../pages/AccountDetails.tsx";
 
 interface ExtrinsicEventsProps {
   extrinsicId: string;
