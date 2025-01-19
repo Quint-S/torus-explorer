@@ -110,7 +110,7 @@ export const ExtrinsicDetails = () => {
             <DetailLabel>Method:</DetailLabel>
             <DetailValue>{extrinsic.method}</DetailValue>
           </DetailRow>
-          {extrinsic.module === 'ethereum' && <EthereumTransfer extrinsicId={extrinsic.id} />}
+          {/*{extrinsic.module === 'ethereum' && <EthereumTransfer extrinsicId={extrinsic.id} />}*/}
           <DetailRow>
             <DetailLabel>Signer:</DetailLabel>
             <DetailValue>{extrinsic.signer} <CopyButton textToCopy={extrinsic.signer}/></DetailValue>

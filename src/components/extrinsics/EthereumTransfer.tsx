@@ -23,16 +23,18 @@ export const EthereumTransfer: React.FC<ExtrinsicEventsProps> = ({ extrinsicId }
       extrinsicId: parseInt(extrinsicId.split('-')[1] || '0')
     }});
 
-  return (<>
+  return (
+      <>
       {loading && <DetailRow><TerminalLoading /></DetailRow>}
       {error && <div>Error: {error.message}</div>}
 
-      {data && (
-          <DetailRow>
-            <DetailLabel>Transfer to Base:</DetailLabel>
-            <DetailValue><a target={'_blank'} href={`https://basescan.org/address/${JSON.parse(data.events.nodes[0].data)[0]}`}>{JSON.parse(data.events.nodes[0].data)[0]}</a></DetailValue>
-          </DetailRow>
-      )}
+      {data && JSON.stringify(JSON.parse(data.events.nodes[0].data)[0])
+          // JSON.parse(data.events.nodes[0].data)[0] && (
+          // <DetailRow>
+          //   <DetailLabel>Transfer to Base:</DetailLabel>
+          //   <DetailValue><a target={'_blank'} href={`https://basescan.org/address/${JSON.parse(data.events.nodes[0].data)[0]}`}>{JSON.parse(data.events.nodes[0].data)[0]}</a></DetailValue>
+          // </DetailRow>
+      }
       </>
   )
 }
