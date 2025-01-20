@@ -126,7 +126,7 @@ export const ExtrinsicDetails = () => {
           </DetailRow>
           <DetailRow>
             <DetailLabel>Arguments:</DetailLabel>
-            <DetailValue><JsonView clickToExpandNode={true} shouldExpandNode={(level, number) => {
+            <DetailValue><JsonView clickToExpandNode={true} shouldExpandNode={(level) => {
               return !(level > 1)
             }}
                                    data={JSON.parse(extrinsic.args)} style={{
