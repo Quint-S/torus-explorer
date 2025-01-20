@@ -14,7 +14,7 @@ const TerminalHeader = styled.div`
     padding-left: 5px;
     position: sticky;
     top: 0;
-    z-index: 1; // Keep header above content
+    z-index: 1;
 `
 
 const TerminalContent = styled.div`

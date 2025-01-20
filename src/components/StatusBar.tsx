@@ -52,7 +52,7 @@ const GET_SUPPLY = gql`
   }
 `
 
-export const I3StatusBar = () => {
+export const StatusBar = () => {
   const { loading, error, data } = useQuery(GET_SUPPLY);
   const [price, setPrice] = useState<string | null>(null);
   // const [liquidity, setLiquidity] = useState<number | null>(null);
@@ -64,22 +64,18 @@ export const I3StatusBar = () => {
       try {
         const response = await fetch('https://api.dexscreener.com/latest/dex/tokens/0x78EC15C5FD8EfC5e924e9EEBb9e549e29C785867');
         const data: DexScreenerResponse = await response.json();
-        // Get the USDC pair data (first pair in the response)
         const pairData = data.pairs[0];
-
         setPrice(pairData.priceUsd);
-
-        // setLiquidity(pairData.liquidity.usd);
         setLoadingPrice(false);
       } catch (error) {
         console.error('Error fetching price:', error);
-        setPrice('Error');
+        setPrice('');
         setLoadingPrice(false);
       }
     };
 
     fetchPrice();
-    const interval = setInterval(fetchPrice, 30000); // Update every 30 seconds
+    const interval = setInterval(fetchPrice, 30_000);
 
     return () => clearInterval(interval);
   }, []);

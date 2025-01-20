@@ -8,7 +8,6 @@ export const useKeyboardNavigation = () => {
     const [clickableElements, setClickableElements] = useState<ClickableElement[]>([]);
     const location = useLocation();
 
-    // Reset navigation when route changes
     useEffect(() => {
         // setCurrentIndex(-1);
         // Small delay to let the new page render
@@ -19,30 +18,24 @@ export const useKeyboardNavigation = () => {
     }, [location]);
 
     const getAllClickableElements = () => {
-        // Get all <a> and <button> elements using a single query
         const allElements = Array.from(document.querySelectorAll('a, button')) as ClickableElement[];
         
-        // Filter for actually clickable elements
         const visibleElements = allElements.filter(element => {
-            // Get computed style
             const style = window.getComputedStyle(element);
             const rect = element.getBoundingClientRect();
             
-            // Check if the element is visible and clickable
-            const isVisible = style.display !== 'none' && 
+            const isVisible = style.display !== 'none' &&
                             style.visibility !== 'hidden' && 
                             style.opacity !== '0' &&
                             rect.width > 0 && 
                             rect.height > 0;
 
-            // Check if it's a clickable link or button
-            const isClickable = element instanceof HTMLAnchorElement ? 
+            const isClickable = element instanceof HTMLAnchorElement ?
                               (element.hasAttribute('href') && 
                                !element.getAttribute('href')?.startsWith('#') &&
                                !element.getAttribute('aria-hidden')) :
                               !element.disabled && !element.getAttribute('aria-hidden');
 
-            // Check if any parent is hidden
             let parent = element.parentElement;
             while (parent) {
                 const parentStyle = window.getComputedStyle(parent);
@@ -54,31 +47,26 @@ export const useKeyboardNavigation = () => {
                 parent = parent.parentElement;
             }
 
-            // Check if this element is the actual target (not a parent of another clickable element)
-            const hasNestedElements = 
+            const hasNestedElements =
                 element.getElementsByTagName('a').length > 0 ||
                 element.getElementsByTagName('button').length > 0;
 
             return isVisible && isClickable && !hasNestedElements;
         });
 
-        // Sort elements by their position in the document
         return visibleElements;
         // .sort((a, b) => {
         //     const aRect = a.getBoundingClientRect();
         //     const bRect = b.getBoundingClientRect();
         //
-        //     // First compare by vertical position (top to bottom)
         //     if (Math.abs(aRect.top - bRect.top) > 5) { // 5px threshold for same line
         //         return aRect.top - bRect.top;
         //     }
-        //     // If on same line, compare by horizontal position (left to right)
         //     return aRect.left - bRect.left;
         // });
     };
 
     useEffect(() => {
-        // Update elements when DOM changes
         const updateElements = () => {
             const newElements = getAllClickableElements();
             const currentElements = JSON.stringify(newElements.map(el => ({
@@ -94,17 +82,14 @@ export const useKeyboardNavigation = () => {
 
             if (currentElements !== oldElements) {
                 setClickableElements(newElements);
-                // Reset index if current index is invalid
                 if (currentIndex >= newElements.length) {
                     setCurrentIndex(-1);
                 }
             }
         };
 
-        // Initial elements collection
         updateElements();
 
-        // Set up mutation observer to watch for DOM changes
         const observer = new MutationObserver(() => {
             requestAnimationFrame(updateElements);
         });
@@ -117,12 +102,9 @@ export const useKeyboardNavigation = () => {
         });
 
         const handleKeyDown = (e: KeyboardEvent) => {
-            // Don't handle if user is typing in an input or textarea
             if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
                 return;
             }
-
-            // Get fresh list of elements
             const currentElements = getAllClickableElements();
             
             switch (e.key) {
@@ -166,9 +148,7 @@ export const useKeyboardNavigation = () => {
         };
     }, [currentIndex, clickableElements]);
 
-    // Effect to handle focus and styling
     useEffect(() => {
-        // Remove previous highlights and classes
         const elements = document.querySelectorAll('a, button');
         elements.forEach(element => {
             if (element instanceof HTMLElement) {

@@ -9,7 +9,7 @@ import {Extrinsics} from './pages/Extrinsics'
 import {Events} from './pages/Events'
 import ThreeJsTorus from './components/ThreeJsTorus'
 import { AccountDetails } from './pages/AccountDetails'
-import { I3StatusBar } from './components/I3StatusBar'
+import { StatusBar } from './components/StatusBar.tsx'
 import {ExtrinsicDetails} from "./pages/ExtrinsicDetails.tsx";
 import { HelmetProvider } from 'react-helmet-async';
 import { BlockDetails } from './pages/BlockDetails.tsx'
@@ -34,7 +34,7 @@ const AppContent = () => {
         position: 'relative',
         overflow: 'auto'
       }}>
-        <I3StatusBar />
+        <StatusBar />
         <Sidebar />
         <div style={{ flex: 1, overflow: 'auto' }}>
           <Routes>

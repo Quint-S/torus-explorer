@@ -50,8 +50,6 @@ export const GET_EXTRINSIC_BY_HASH = gql`
 `
 
 
-
-
 export const ExtrinsicDetails = () => {
   const { id } = useParams()
   const { loading, error, data } = useQuery(id?.startsWith('0x') ? GET_EXTRINSIC_BY_HASH : GET_EXTRINSIC, {
