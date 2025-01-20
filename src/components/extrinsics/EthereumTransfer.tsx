@@ -1,16 +1,17 @@
 import { gql, useQuery } from '@apollo/client'
 import React from "react";
 import {TerminalLoading} from "../TerminalLoading.tsx";
-import { DetailRow} from "../../pages/AccountDetails.tsx";
+import {DetailLabel, DetailRow, DetailValue} from "../../pages/AccountDetails.tsx";
 
 interface ExtrinsicEventsProps {
   extrinsicId: string;
 }
 export const GET_LAST_EVM_EVENT = gql`
   query GetLastEVMEvent($blockNumber: BigFloat!, $extrinsicId: Int!) {
-    events(last: 1, filter: {and: {blockNumber: {equalTo: $blockNumber}, extrinsicId: {equalTo: $extrinsicId}}}) {
+    events(filter: {and: {blockNumber: {equalTo: $blockNumber}, extrinsicId: {equalTo: $extrinsicId}}}) {
       nodes{
         data
+        eventName
       }
     }
   }
@@ -22,18 +23,18 @@ export const EthereumTransfer: React.FC<ExtrinsicEventsProps> = ({ extrinsicId }
       blockNumber: extrinsicId.split('-')[0],
       extrinsicId: parseInt(extrinsicId.split('-')[1] || '0')
     }});
+  const executed = data && JSON.parse(data.events.nodes.find((event: { eventName: string; }) => { return event.eventName === 'Executed'}).data)[0];
 
   return (
       <>
       {loading && <DetailRow><TerminalLoading /></DetailRow>}
       {error && <div>Error: {error.message}</div>}
 
-      {data && JSON.stringify(JSON.parse(data.events.nodes[0].data)[0])
-          // JSON.parse(data.events.nodes[0].data)[0] && (
-          // <DetailRow>
-          //   <DetailLabel>Transfer to Base:</DetailLabel>
-          //   <DetailValue><a target={'_blank'} href={`https://basescan.org/address/${JSON.parse(data.events.nodes[0].data)[0]}`}>{JSON.parse(data.events.nodes[0].data)[0]}</a></DetailValue>
-          // </DetailRow>
+      {executed && (
+          <DetailRow>
+            <DetailLabel>Transfer to Base:</DetailLabel>
+            <DetailValue><a target={'_blank'} href={`https://basescan.org/address/${executed}`}>{executed}↗</a></DetailValue>
+          </DetailRow>)
       }
       </>
   )

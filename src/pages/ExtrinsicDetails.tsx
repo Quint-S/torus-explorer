@@ -9,6 +9,8 @@ import { DetailLabel } from './AccountDetails.tsx'
 import { DetailRow } from './AccountDetails.tsx'
 import { ExtrinsicEvents } from './ExtrinsicEvents.tsx';
 import { Helmet } from 'react-helmet-async';
+import {JsonView} from "react-json-view-lite";
+import {EthereumTransfer} from "../components/extrinsics/EthereumTransfer.tsx";
 
 export const GET_EXTRINSIC = gql`
   query GetExtrinsic($id: String!) {
@@ -109,7 +111,7 @@ export const ExtrinsicDetails = () => {
             <DetailLabel>Method:</DetailLabel>
             <DetailValue>{extrinsic.method}</DetailValue>
           </DetailRow>
-          {/*{extrinsic.module === 'ethereum' && <EthereumTransfer extrinsicId={extrinsic.id} />}*/}
+          {extrinsic.module === 'ethereum' && <EthereumTransfer extrinsicId={extrinsic.id} />}
           <DetailRow>
             <DetailLabel>Signer:</DetailLabel>
             <DetailValue>{extrinsic.signer} <CopyButton textToCopy={extrinsic.signer}/></DetailValue>
@@ -124,7 +126,28 @@ export const ExtrinsicDetails = () => {
           </DetailRow>
           <DetailRow>
             <DetailLabel>Arguments:</DetailLabel>
-            <DetailValue>{extrinsic.args}</DetailValue>
+            <DetailValue><JsonView clickToExpandNode={true} shouldExpandNode={(level, number) => {
+              return !(level > 1)
+            }}
+                                   data={JSON.parse(extrinsic.args)} style={{
+                                     "container": "break-all",
+              "basicChildStyle": "_basic-element-style_78paz_55",
+              "childFieldsContainer": "pl-5",
+              "label": "text-blue-400",
+              "clickableLabel": "cursor-pointer text-blue-300",
+              "nullValue": "_value-null-light_78paz_82",
+              "undefinedValue": "_value-undefined-light_78paz_86",
+              "stringValue": "_value-string-light_78paz_90",
+              "booleanValue": "_value-boolean-light_78paz_98",
+              "numberValue": "_value-number-light_78paz_94",
+              "otherValue": "_value-other-light_78paz_102",
+              "punctuation": "_punctuation-light_78paz_77 _punctuation-base_78paz_12",
+              "collapseIcon": "collapse-icon",
+              "expandIcon": "expand-icon",
+              "collapsedContent": "_collapsed-content-light_78paz_118 _collapsed-content-base_78paz_40 _pointer_78paz_21",
+              "noQuotesForStringValues": false,
+              "quotesForFieldNames": false
+            }}/></DetailValue>
           </DetailRow>
 
             <TerminalTabs
