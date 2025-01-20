@@ -24,7 +24,7 @@ const TerminalContent = styled.div`
 const TerminalFooter = styled.div`
   border-top: 1px solid #00c4ff;
     padding-left: 5px;
-  position: sticky;
+  //position: sticky;
   bottom: 0;
   background-color: inherit;
   z-index: 1;
