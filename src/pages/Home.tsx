@@ -61,7 +61,7 @@ export const Home = () => {
               </DetailRow>
               <DetailRow>
                 <DetailLabel>Last Timestamp:</DetailLabel>
-                <DetailValue>{new Date(parseInt(data._metadata.lastProcessedTimestamp)).toLocaleString()}</DetailValue>
+                <DetailValue>{new Date(parseInt(data._metadata.lastProcessedTimestamp)).toLocaleString('en-US', { timeZone: 'UTC' })} UTC</DetailValue>
               </DetailRow>
               <DetailRow>
                 <DetailLabel>Target Height:</DetailLabel>

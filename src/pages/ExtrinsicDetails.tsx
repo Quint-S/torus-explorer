@@ -3,7 +3,6 @@ import {TerminalTabs, TerminalWindow} from '../components/TerminalWindow'
 import {useParams} from 'react-router-dom'
 import { TerminalLoading } from '../components/TerminalLoading.tsx'
 import {CopyButton} from "../components/CopyButton.tsx";
-// import {ExtrinsicEvents} from "./ExtrinsicEvents.tsx";
 import { DetailValue } from './AccountDetails.tsx'
 import { DetailLabel } from './AccountDetails.tsx'
 import { DetailRow } from './AccountDetails.tsx'
