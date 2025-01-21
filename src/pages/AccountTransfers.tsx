@@ -1,6 +1,6 @@
 import { gql, useQuery } from '@apollo/client'
 import { TerminalWindow } from '../components/TerminalWindow'
-import { formatTORUS } from '../utils/utils.ts'
+import {formattedNumber, formatTORUS} from '../utils/utils.ts'
 import {Link, useParams} from 'react-router-dom'
 import { TerminalLoading } from '../components/TerminalLoading.tsx'
 import {DataTable} from "../components/DataTable.tsx";
@@ -53,7 +53,6 @@ export const AccountTransfers = () => {
   if (!address) {
     return <div>Error: No address provided</div>
   }
-  const formattedNumber = (num: number) => num < 10 ? `000${num}` : num < 100 ? `00${num}` : num < 1000 ? `0${num}` : `${num}`;
 
   return (
       <TerminalWindow title={`account_transfers`} footer={pageControls}>

@@ -1,5 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { Sidebar } from './components/Sidebar'
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
+import { NavigationBar } from './components/NavigationBar.tsx'
 import {Home} from './pages/Home'
 import {Blocks} from './pages/Blocks'
 import {Transfers} from './pages/Transfers'
@@ -16,15 +16,12 @@ import { BlockDetails } from './pages/BlockDetails.tsx'
 import { useKeyboardNavigation } from './hooks/useKeyboardNavigation'
 
 const AppContent = () => {
-  // Initialize keyboard navigation
-  useKeyboardNavigation();
 
+  useKeyboardNavigation();
   return (
     <>
       <ThreeJsTorus />
-      <div style={{ 
-        display: 'flex', 
-        flexDirection: 'column',
+      <div className={'flex flex-col'} style={{
         width: '100vw', 
         height: '100vh', 
         padding: '10px', 
@@ -35,7 +32,7 @@ const AppContent = () => {
         overflow: 'auto'
       }}>
         <StatusBar />
-        <Sidebar />
+        <NavigationBar />
         <div style={{ flex: 1, overflow: 'auto' }}>
           <Routes>
             <Route path="/" element={<Home />} />

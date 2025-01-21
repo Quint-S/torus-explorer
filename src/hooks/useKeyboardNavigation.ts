@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-type ClickableElement = HTMLAnchorElement | HTMLButtonElement;
+type ClickableElement = HTMLAnchorElement | HTMLButtonElement | HTMLInputElement;
 
 export const useKeyboardNavigation = () => {
     const [currentIndex, setCurrentIndex] = useState<number>(-1);
@@ -18,7 +18,7 @@ export const useKeyboardNavigation = () => {
     }, [location]);
 
     const getAllClickableElements = () => {
-        const allElements = Array.from(document.querySelectorAll('a, button')) as ClickableElement[];
+        const allElements = Array.from(document.querySelectorAll('a, button, input')) as ClickableElement[];
         
         const visibleElements = allElements.filter(element => {
             const style = window.getComputedStyle(element);
@@ -34,7 +34,9 @@ export const useKeyboardNavigation = () => {
                               (element.hasAttribute('href') && 
                                !element.getAttribute('href')?.startsWith('#') &&
                                !element.getAttribute('aria-hidden')) :
-                              !element.disabled && !element.getAttribute('aria-hidden');
+                              (element instanceof HTMLInputElement ? 
+                                !element.disabled && !element.getAttribute('aria-hidden') :
+                                !element.disabled && !element.getAttribute('aria-hidden'));
 
             let parent = element.parentElement;
             while (parent) {
@@ -48,10 +50,12 @@ export const useKeyboardNavigation = () => {
             }
 
             const hasNestedElements =
-                element.getElementsByTagName('a').length > 0 ||
-                element.getElementsByTagName('button').length > 0;
+            element.getElementsByTagName('a').length > 0 ||
+            element.getElementsByTagName('button').length > 0 ||
+            element.getElementsByTagName('input').length > 0;
 
-            return isVisible && isClickable && !hasNestedElements;
+        return isVisible && isClickable && !hasNestedElements;
+
         });
 
         return visibleElements;
@@ -103,7 +107,14 @@ export const useKeyboardNavigation = () => {
 
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
-                return;
+                // if(!e.target.classList.contains('terminal-cursor')){
+
+                if(e.key !== 'ArrowDown' && e.key !== 'ArrowUp') {
+                    return;
+                }else{
+                    e.target.blur();
+                }
+                // }
             }
             const currentElements = getAllClickableElements();
             
@@ -134,7 +145,13 @@ export const useKeyboardNavigation = () => {
                 }
                 case 'Enter':
                     if (currentIndex >= 0 && currentIndex < currentElements.length) {
-                        currentElements[currentIndex].click();
+                        if (currentElements[currentIndex] instanceof HTMLInputElement) {
+                            currentElements[currentIndex].classList.remove('terminal-cursor');
+
+                            setTimeout(() => {currentElements[currentIndex].focus();}, 100);
+                        } else {
+                            currentElements[currentIndex].click();
+                        }
                     }
                     break;
             }
@@ -149,7 +166,7 @@ export const useKeyboardNavigation = () => {
     }, [currentIndex, clickableElements]);
 
     useEffect(() => {
-        const elements = document.querySelectorAll('a, button');
+        const elements = document.querySelectorAll('a, button, input');
         elements.forEach(element => {
             if (element instanceof HTMLElement) {
                 element.classList.remove('terminal-cursor');
@@ -158,8 +175,12 @@ export const useKeyboardNavigation = () => {
 
         if (currentIndex >= 0 && currentIndex < clickableElements.length) {
             const currentElement = clickableElements[currentIndex];
-            currentElement.classList.add('terminal-cursor');
-            currentElement.scrollIntoView({ behavior: 'instant', block: 'nearest' });
+            if (currentElement instanceof HTMLInputElement && currentElement === document.activeElement) {
+                // currentElement.focus();
+            } else {
+                currentElement.classList.add('terminal-cursor');
+                currentElement.scrollIntoView({ behavior: 'instant', block: 'nearest' });
+            }
         }
     }, [currentIndex, clickableElements]);
 

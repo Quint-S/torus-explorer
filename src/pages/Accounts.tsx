@@ -5,9 +5,8 @@ import { DataTable } from '../components/DataTable.tsx';
 import { useState} from 'react';
 import { PaginationControls } from '../components/PaginationControls.tsx';
 import { TerminalLoading } from '../components/TerminalLoading.tsx';
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {ResponsiveAddress} from "../components/ResponsiveAddress.tsx";
-import {SearchBar} from "../components/SearchBar.tsx";
 import { Helmet } from 'react-helmet-async';
 
 const GET_ACCOUNTS = gql`
@@ -38,9 +37,7 @@ export const Accounts = () => {
       ? `Browse ${data.accounts.totalCount.toLocaleString()} accounts on the Torus blockchain - View balances, transfers, and account details`
       : 'Browse accounts on the Torus blockchain - View balances, transfers, and account details';
 
-    const onsearch = (search: string) => {
-        navigate(`/account/${search}`)
-    }
+
     const pageControls = (
 <div className={'flex'}>
         {loading && <TerminalLoading/>}
@@ -50,10 +47,9 @@ export const Accounts = () => {
           itemsPerPage={itemsPerPage}
           dataLength={data?.accounts.nodes.length}
           onPageChange={setCurrentPage}
-        />}<SearchBar placeholder={'Enter address to lookup..'} onSearch={onsearch}/></div>
+        />}</div>
       );
 
-    const navigate = useNavigate();
 
     return (
         <>

@@ -66,7 +66,7 @@ const ThreeJsTorus: React.FC = () => {
     mountRef.current.appendChild(renderer.domElement);
 
         
-    // Torus geometry
+
     const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
     // const material = new THREE.MeshPhongMaterial({
     //   color: 0xffffff,
@@ -114,7 +114,7 @@ const ThreeJsTorus: React.FC = () => {
     let time = 0;
     const animate = () => {
       requestAnimationFrame(animate);
-      camera.rotateY(0.001);
+      camera.rotateY(0.0001);
             // Update shader time uniform
             time += 0.01;
             material.uniforms.time.value = time;

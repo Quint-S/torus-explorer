@@ -18,6 +18,8 @@ export function formatTORUS(torusAmount: number){
 
     return s;
 }
+export const formattedNumber = (num: number) => num < 10 ? `000${num}` : num < 100 ? `00${num}` : num < 1000 ? `0${num}` : `${num}`;
+
 
 export function convertToInternationalCurrencySystem(labelValue: number): string {
     const absValue = Math.abs(Number(labelValue));

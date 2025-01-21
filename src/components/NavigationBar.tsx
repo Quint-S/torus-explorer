@@ -1,18 +1,16 @@
 import styled from 'styled-components'
-import { NavLink, useLocation } from 'react-router-dom'
+import {NavLink, useLocation, useNavigate} from 'react-router-dom'
 import { useState, useEffect } from 'react';
+import {SearchBar} from "./SearchBar.tsx";
+import {formattedNumber} from "../utils/utils.ts";
 
 const SidebarContainer = styled.div`
-    width: 100%;
-    height: 30px;
+    //height: 30px;
     padding: 8px 16px;
     border-radius: 2px;
     border: 1px solid #0050a1;
     margin-bottom: 5px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 16px;
+    //gap: 6px;
     
     &:focus {outline:0;}
 `
@@ -59,7 +57,7 @@ interface NavItemType {
     shortcutKey: string;
 }
 
-export const Sidebar = () => {
+export const NavigationBar = () => {
     const [focusedIndex, setFocusedIndex] = useState(-1);
     const location = useLocation();
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -149,19 +147,41 @@ export const Sidebar = () => {
         );
     };
 
+    const navigate = useNavigate();
+
+    const onsearch = (search: string) => {
+        if (search.length === 48) {
+            navigate(`/account/${search}`)
+            return
+        } else if (search.includes('-') && !isNaN(parseInt(search.split('-')[0])) && !isNaN(parseInt(search.split('-')[1]))) {
+            const id = parseInt(search.split('-')[1])
+            const extrinsicid = `${parseInt(search.split('-')[0])}-${formattedNumber(id)}`
+            navigate(`/extrinsic/${extrinsicid}`)
+            return
+        } else if (!isNaN(parseInt(search))) {
+            navigate(`/block/${search}`)
+            return
+        }
+    }
+
     return (
-        <SidebarContainer tabIndex={0} className={'flex justify-between'}>
-            {navItems.map((item, index) => (
-                <NavItem
-                    key={item.to}
-                    onClick={() => setFocusedIndex(index)}
-                    to={item.to}
-                    id={`nav-item-${index}`}
-                    className={`${focusedIndex === index ? 'hovered' : ''} flex-1 text-center`}
-                >
-                    {renderLabel(item.label, item.shortcutKey)}
-                </NavItem>
-            ))}
+        <SidebarContainer tabIndex={0} className={'flex flex-col'}>
+            <div className={'flex justify-between w-full'}>
+                {navItems.map((item, index) => (
+                    <NavItem
+                        key={item.to}
+                        onClick={() => setFocusedIndex(index)}
+                        to={item.to}
+                        id={`nav-item-${index}`}
+                        className={`${focusedIndex === index ? 'hovered' : ''} flex-1 text-center`}
+                    >
+                        {renderLabel(item.label, item.shortcutKey)}
+                    </NavItem>
+                ))}
+            </div>
+            <div className={"w-full"}>
+                <SearchBar placeholder={'Enter address/block/extrinsic'} onSearch={onsearch}/>
+            </div>
         </SidebarContainer>
     );
 }
