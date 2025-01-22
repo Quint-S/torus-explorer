@@ -14,7 +14,10 @@ const GET_NETWORK_INFO = gql`
       chain
       specName
     }
-    chainInfo(id: "CircSupply") {
+    circSupply: chainInfo(id: "CircSupply") {
+      value
+    }
+    totalStake: chainInfo(id: "TotalStake") {
       value
     }
   }
@@ -25,7 +28,7 @@ export const Home = () => {
 
   const title = 'TorEx - Torus Blockchain Explorer';
   const description = data 
-    ? `Explore the Torus blockchain - Current block height: ${data._metadata.lastProcessedHeight}, Circulating supply: ${formatTORUS(data.chainInfo.value)} TORUS`
+    ? `Explore the Torus blockchain - Current block height: ${data._metadata.lastProcessedHeight}, Circulating supply: ${formatTORUS(data.circSupply.value)} TORUS`
     : 'Explore the Torus blockchain - View blocks, transactions, accounts, and network statistics';
 
   return (
@@ -68,8 +71,16 @@ export const Home = () => {
                 <DetailValue>{data._metadata.targetHeight}</DetailValue>
               </DetailRow>
               <DetailRow>
+                <DetailLabel>Total Supply:</DetailLabel>
+                <DetailValue>{formatTORUS("144000000000000000000000000")} ♓︎TORUS</DetailValue>
+              </DetailRow>
+              <DetailRow>
                 <DetailLabel>Circulating supply:</DetailLabel>
-                <DetailValue>{formatTORUS(data.chainInfo.value)} ♓︎TORUS</DetailValue>
+                <DetailValue>{formatTORUS((BigInt(data.circSupply.value) + BigInt(data.totalStake.value)).toString())} ♓︎TORUS</DetailValue>
+              </DetailRow>
+              <DetailRow>
+                <DetailLabel>Staked:</DetailLabel>
+                <DetailValue>{formatTORUS(data.totalStake.value)} ♓︎TORUS</DetailValue>
               </DetailRow>
             </div>
             <div className="flex-grow flex items-center justify-center">

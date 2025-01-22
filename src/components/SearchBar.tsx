@@ -33,13 +33,12 @@ const Prompt = styled.span`
   .hostname {
     color: #6cffb9;
   }
-`;
 
-const MeasureSpan = styled.span`
-  position: absolute;
-  visibility: hidden;
-  white-space: pre;
-  font: inherit;
+  @media (max-width: 768px) { 
+    .desktop {
+      display: none;
+    }
+  }
 `;
 
 export const SearchBar = ({
@@ -47,16 +46,12 @@ export const SearchBar = ({
   onSearch
 }: SearchBarProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const measureRef = useRef<HTMLSpanElement>(null);
   const [inputValue, setInputValue] = useState('');
-  const [inputWidth, setInputWidth] = useState(16);
+  const [inputWidth, setInputWidth] = useState(placeholder.length*8);
 
   useEffect(() => {
-    if (measureRef.current) {
-      const textToMeasure = inputValue || placeholder;
-      measureRef.current.textContent = textToMeasure;
-      setInputWidth(measureRef.current.offsetWidth);
-    }
+    const textToMeasure = inputValue || placeholder;
+    setInputWidth(textToMeasure.length*8);
   }, [inputValue, placeholder]);
 
   const handleSubmit = (e: FormEvent) => {
@@ -70,9 +65,9 @@ export const SearchBar = ({
     <div className={'flex items-center w-full'}>
       <TerminalForm onSubmit={handleSubmit} className="w-full">
         <Prompt>
-          <span className="username">user</span>@<span className="hostname">torex.rs</span>:~$ egrep -i "
+          <span className="desktop"><span className="username">user</span>@<span className="hostname">torex.rs</span>:</span>~$ egrep -i "
+
         </Prompt>
-        <MeasureSpan ref={measureRef} />
         <TerminalInput
           ref={inputRef}
           name="searchinput"
@@ -81,8 +76,9 @@ export const SearchBar = ({
           onChange={(e) => setInputValue(e.target.value)}
           style={{ width: inputWidth }}
           autoComplete="off"
+          spellCheck={false}
         />
-        <Prompt>" ~/torus/*</Prompt>
+        <Prompt>"<span className="desktop"> ~/torus/*</span></Prompt>
       </TerminalForm>
     </div>
   );

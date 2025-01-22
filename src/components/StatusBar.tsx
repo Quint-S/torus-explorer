@@ -46,7 +46,10 @@ interface DexScreenerResponse {
 
 const GET_SUPPLY = gql`
   query GetSupply {
-    chainInfo(id: "CircSupply") {
+    circSupply: chainInfo(id: "CircSupply") {
+      value
+    }
+    totalStake: chainInfo(id: "TotalStake") {
       value
     }
   }
@@ -104,7 +107,7 @@ export const StatusBar = () => {
       {!loading && !error && (
           <StatusItem>
             <span>Circulating:</span>
-            <span>{loading ? <TerminalLoading/> : <>♓︎{formatTORUS(parseFloat(`${BigInt(data.chainInfo.value)}`))}︎</>}</span>
+            <span>{loading ? <TerminalLoading/> : <>♓︎{formatTORUS((BigInt(data.circSupply.value) + BigInt(data.totalStake.value)).toString())}︎</>}</span>
           </StatusItem>
       )}
       <StatusItem>
