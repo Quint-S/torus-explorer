@@ -1,6 +1,6 @@
 import { gql, useQuery } from '@apollo/client'
 import {TerminalTabs, TerminalWindow} from '../components/TerminalWindow'
-import {useParams} from 'react-router-dom'
+import {Link, useParams} from 'react-router-dom'
 import { TerminalLoading } from '../components/TerminalLoading.tsx'
 import {CopyButton} from "../components/CopyButton.tsx";
 import { DetailValue } from './AccountDetails.tsx'
@@ -10,6 +10,7 @@ import { ExtrinsicEvents } from './ExtrinsicEvents.tsx';
 import { Helmet } from 'react-helmet-async';
 import {JsonView} from "react-json-view-lite";
 import {EthereumTransfer} from "../components/extrinsics/EthereumTransfer.tsx";
+import {ResponsiveAddress} from "../components/ResponsiveAddress.tsx";
 
 export const GET_EXTRINSIC = gql`
   query GetExtrinsic($id: String!) {
@@ -98,7 +99,7 @@ export const ExtrinsicDetails = () => {
           </DetailRow>
           <DetailRow>
             <DetailLabel>Block Number:</DetailLabel>
-            <DetailValue>{extrinsic.blockNumber}</DetailValue>
+            <DetailValue><Link to={`/block/${extrinsic.blockNumber}`}>{extrinsic.blockNumber}</Link></DetailValue>
           </DetailRow>
           <DetailRow>
             <DetailLabel>Module:</DetailLabel>
@@ -111,7 +112,7 @@ export const ExtrinsicDetails = () => {
           {extrinsic.module === 'ethereum' && <EthereumTransfer extrinsicId={extrinsic.id} />}
           <DetailRow>
             <DetailLabel>Signer:</DetailLabel>
-            <DetailValue>{extrinsic.signer} <CopyButton textToCopy={extrinsic.signer}/></DetailValue>
+            <DetailValue><ResponsiveAddress linkPath={'account'} address={extrinsic.signer}/> <CopyButton textToCopy={extrinsic.signer}/></DetailValue>
           </DetailRow>
           <DetailRow>
             <DetailLabel>Status:</DetailLabel>

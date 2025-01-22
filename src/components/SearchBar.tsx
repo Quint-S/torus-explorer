@@ -1,6 +1,5 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import styled from 'styled-components';
-
 interface SearchBarProps {
   placeholder: string;
   onSearch: (search: string) => void;
@@ -61,6 +60,17 @@ export const SearchBar = ({
     }
   };
 
+  const searchtype = () => {
+    const search = inputRef.current?.value ?? '';
+    if (search.length === 48) {
+      return 'accounts/';
+    } else if (search.includes('-') && !isNaN(parseInt(search.split('-')[0])) && !isNaN(parseInt(search.split('-')[1]))) {
+      return 'extrinsics/';
+    } else if (!isNaN(parseInt(search)) || search.length === 66) {
+      return 'blocks/';
+    }
+    return '';
+  }
   return (
     <div className={'flex items-center w-full'}>
       <TerminalForm onSubmit={handleSubmit} className="w-full">
@@ -78,7 +88,7 @@ export const SearchBar = ({
           autoComplete="off"
           spellCheck={false}
         />
-        <Prompt>"<span className="desktop"> ~/torus/*</span></Prompt>
+        <Prompt>"<span className="desktop"> ~/torus/{searchtype()}*</span></Prompt>
       </TerminalForm>
     </div>
   );

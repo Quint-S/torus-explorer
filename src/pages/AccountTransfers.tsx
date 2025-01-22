@@ -66,10 +66,10 @@ export const AccountTransfers = () => {
             <DataTable names={['Amount', 'From', 'To', 'Height', 'Timestamp']} records={data.transfers.nodes.map((transfer: {
               extrinsicId: number;
               id: string; amount: number; from: string; to: string; blockNumber: string; timestamp: string | number | Date }) => {
-              const formattedFrom = <ResponsiveAddress address={transfer.from}/>;
-              const formattedTo = <ResponsiveAddress address={transfer.to}/>;
+              const formattedFrom = <ResponsiveAddress linkPath={transfer.from === address ? undefined : 'account'} address={transfer.from}/>;
+              const formattedTo = <ResponsiveAddress linkPath={transfer.to === address ? undefined : 'account'} address={transfer.to}/>;
 
-              return {id: transfer.id, data: [formatTORUS(transfer.amount), transfer.from === address ? formattedFrom : <Link to={`/account/${transfer.from}`}>{formattedFrom}</Link>, transfer.to === address ? formattedTo : <Link to={`/account/${transfer.to}`}><ResponsiveAddress address={transfer.to}/></Link>, <Link to={`/extrinsic/${transfer.blockNumber}-${formattedNumber(transfer.extrinsicId)}`}>{transfer.blockNumber}-{transfer.extrinsicId}</Link>, new Date(transfer.timestamp).toLocaleString()
+              return {id: transfer.id, data: [formatTORUS(transfer.amount), formattedFrom, formattedTo, <Link to={`/extrinsic/${transfer.blockNumber}-${formattedNumber(transfer.extrinsicId)}`}>{transfer.blockNumber}-{transfer.extrinsicId}</Link>, new Date(transfer.timestamp).toLocaleString()
                 ]}
             })} /></div>
         )}

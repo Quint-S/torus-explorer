@@ -5,7 +5,6 @@ import { DataTable } from '../components/DataTable.tsx';
 import { useState} from 'react';
 import { PaginationControls } from '../components/PaginationControls.tsx';
 import { TerminalLoading } from '../components/TerminalLoading.tsx';
-import {Link} from "react-router-dom";
 import {ResponsiveAddress} from "../components/ResponsiveAddress.tsx";
 import { Helmet } from 'react-helmet-async';
 
@@ -75,7 +74,7 @@ export const Accounts = () => {
                       records={data.accounts.nodes.map((acc: { id: string; address: string; balanceTotal: number; balanceFree: number; balanceStaked: number; }) => ({
                         id: acc.id,
                         data: [
-                            <Link to={`/account/${acc.address}`}><ResponsiveAddress address={acc.address}/></Link>,
+                            <ResponsiveAddress linkPath={'account'} address={acc.address}/>,
                           formatTORUS(acc.balanceTotal),
                           formatTORUS(acc.balanceFree),
                           formatTORUS(acc.balanceStaked)

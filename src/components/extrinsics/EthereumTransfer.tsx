@@ -32,7 +32,7 @@ export const EthereumTransfer: React.FC<ExtrinsicEventsProps> = ({ extrinsicId }
 
       {executed && (
           <DetailRow>
-            <DetailLabel>Transfer to Base:</DetailLabel>
+            <DetailLabel>EVM account:</DetailLabel>
             <DetailValue><a target={'_blank'} href={`https://basescan.org/address/${executed}`}>{executed}↗</a></DetailValue>
           </DetailRow>)
       }

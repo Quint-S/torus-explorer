@@ -38,7 +38,6 @@ export const DetailLabel = styled.div`
   width: 200px;
   padding-left: 5px;
   color: #00c4ff;
-  font-weight: bold;
 `
 
 export const DetailValue = styled.div`

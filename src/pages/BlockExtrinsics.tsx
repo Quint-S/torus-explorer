@@ -52,7 +52,7 @@ export const BlockExtrinsics: React.FC<BlockExtrinsicsProps> = ({ blockHeight })
             data: [
               <Link to={`/extrinsic/${extrinsic.id}`}>{extrinsic.id}</Link>,
               `${extrinsic.module}::${extrinsic.method}`,
-              extrinsic.signer ? <Link to={`/account/${extrinsic.signer}`}><ResponsiveAddress address={extrinsic.signer}/></Link> : '-',
+              extrinsic.signer ? <ResponsiveAddress linkPath={'account'} address={extrinsic.signer}/> : '-',
               extrinsic.success ? <span style={{color: '#6cffb9'}}>✓</span> : <span style={{color: '#ff6c6c'}}>✗</span>
             ]
           }

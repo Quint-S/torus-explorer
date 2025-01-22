@@ -1,28 +1,25 @@
 import { useEffect, useState, useRef } from 'react';
+import {Link} from "react-router-dom";
 
 interface ResponsiveAddressProps {
   address: string;
+  linkPath?: string;
 }
-// ... existing imports ...
-
 const ADDRESS_BOOK = [
   { name: "BASE BRIDGE", address: "5DDXwRsgvdfukGZbq2o27n43qyDaAnZ6rsfeckGxnaQ1ih2D" },
-  // Add more entries as needed
 ];
 
-export const ResponsiveAddress = ({ address }: ResponsiveAddressProps) => {
+export const ResponsiveAddress = ({ address, linkPath }: ResponsiveAddressProps) => {
   const [formattedAddress, setFormattedAddress] = useState(`${address.slice(0, 1)}..${address.slice(-1)}`);
-  const containerRef = useRef<HTMLSpanElement>(null);
+  const containerRef = useRef<HTMLAnchorElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Find matching address in address book
   const addressEntry = ADDRESS_BOOK.find(entry => entry.address === address);
   const displayName = addressEntry?.name;
 
   useEffect(() => {
     const updateAddressFormat = () => {
       if (!containerRef.current?.parentElement) return;
-      
       const parentWidth = containerRef.current.parentElement.offsetWidth;
 
       const fontWidth = 8*2;
@@ -47,15 +44,20 @@ export const ResponsiveAddress = ({ address }: ResponsiveAddressProps) => {
     };
   }, [address, displayName]);
 
-  return (
-    <div
-      style={{background: 'inherit'}}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <span ref={containerRef}>
+
+  return linkPath ? (
+      <Link to={`/${linkPath}/${address}`} ref={containerRef} >
+      <span style={{background: 'inherit'}}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}>
         {!isHovered ? formattedAddress : (displayName || formattedAddress)}
       </span>
-     </div>
+      </Link>
+  ) : (
+      <span ref={containerRef} style={{background: 'inherit'}}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}>
+        {!isHovered ? formattedAddress : (displayName || formattedAddress)}
+      </span>
   );
 };
