@@ -107,7 +107,7 @@ export const StatusBar = () => {
       {!loading && !error && (
           <StatusItem>
             <span>Circulating:</span>
-            <span>{loading ? <TerminalLoading/> : <>♓︎{formatTORUS((BigInt(data.circSupply.value) + BigInt(data.totalStake.value)).toString())}︎</>}</span>
+            <span>{loading ? <TerminalLoading/> : <>♓︎{formatTORUS(parseInt(data.circSupply.value) + parseInt(data.totalStake.value))}︎</>}</span>
           </StatusItem>
       )}
       <StatusItem>

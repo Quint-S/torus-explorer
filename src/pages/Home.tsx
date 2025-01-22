@@ -72,11 +72,11 @@ export const Home = () => {
               </DetailRow>
               <DetailRow>
                 <DetailLabel>Total Supply:</DetailLabel>
-                <DetailValue>{formatTORUS("144000000000000000000000000")} ♓︎TORUS</DetailValue>
+                <DetailValue>{formatTORUS(144000000000000000000000000)} ♓︎TORUS</DetailValue>
               </DetailRow>
               <DetailRow>
                 <DetailLabel>Circulating supply:</DetailLabel>
-                <DetailValue>{formatTORUS((BigInt(data.circSupply.value) + BigInt(data.totalStake.value)).toString())} ♓︎TORUS</DetailValue>
+                <DetailValue>{formatTORUS(parseInt(data.circSupply.value) + parseInt(data.totalStake.value))} ♓︎TORUS</DetailValue>
               </DetailRow>
               <DetailRow>
                 <DetailLabel>Staked:</DetailLabel>

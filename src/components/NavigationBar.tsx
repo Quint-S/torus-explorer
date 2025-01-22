@@ -158,7 +158,7 @@ export const NavigationBar = () => {
             const extrinsicid = `${parseInt(search.split('-')[0])}-${formattedNumber(id)}`
             navigate(`/extrinsic/${extrinsicid}`)
             return
-        } else if (!isNaN(parseInt(search))) {
+        } else if (!isNaN(parseInt(search)) || search.length === 66) {
             navigate(`/block/${search}`)
             return
         }
