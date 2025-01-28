@@ -48,7 +48,7 @@ export const Blocks = () => {
         {loading && <TerminalLoading/>}
         {error && <div>Error: {error.message}</div>}
         {data && <DataTable names={['Height', 'Hash', 'Timestamp']} records={data.blocks.nodes.map((block: { id: string; height: number; hash: string; timestamp: string | number | Date; }) => {
-          return {id: block.id, data: [<Link to={`/block/${block.height}`}>{block.height}</Link>, <ResponsiveAddress address={block.hash}/> , new Date(block.timestamp).toLocaleString()
+          return {id: block.id, data: [<Link to={`/block/${block.height}`}>{block.height}</Link>, <ResponsiveAddress linkPath={'block'} address={block.hash}/> , new Date(block.timestamp).toLocaleString()
             ]}
         })} />}
       </TerminalWindow>

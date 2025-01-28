@@ -8,6 +8,7 @@ import { DetailLabel } from './AccountDetails.tsx'
 import { DetailRow } from './AccountDetails.tsx'
 import { Helmet } from 'react-helmet-async';
 import { BlockExtrinsics } from './BlockExtrinsics.tsx';
+import { ResponsiveAddress } from '../components/ResponsiveAddress.tsx';
 
 const GET_BLOCK = gql`
   query GetBlock($id: String!) {
@@ -90,11 +91,11 @@ export const BlockDetails = () => {
             </DetailRow>
             <DetailRow>
               <DetailLabel>Hash:</DetailLabel>
-              <DetailValue>{block.hash} <CopyButton textToCopy={block.hash}/></DetailValue>
+              <DetailValue><ResponsiveAddress address={block.hash}/> <CopyButton textToCopy={block.hash}/></DetailValue>
             </DetailRow>
             <DetailRow>
               <DetailLabel>Parent Hash:</DetailLabel>
-              <DetailValue>{block.parentHash} <CopyButton textToCopy={block.parentHash}/></DetailValue>
+              <DetailValue><ResponsiveAddress linkPath='block' address={block.parentHash}/> <CopyButton textToCopy={block.parentHash}/></DetailValue>
             </DetailRow>
             <DetailRow>
               <DetailLabel>Extrinsic Count:</DetailLabel>
