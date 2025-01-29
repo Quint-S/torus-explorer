@@ -9,6 +9,7 @@ import { DetailRow } from './AccountDetails.tsx'
 import { Helmet } from 'react-helmet-async';
 import { BlockExtrinsics } from './BlockExtrinsics.tsx';
 import { ResponsiveAddress } from '../components/ResponsiveAddress.tsx';
+import {BlockEvents} from "./BlockEvents.tsx";
 
 const GET_BLOCK = gql`
   query GetBlock($id: String!) {
@@ -121,6 +122,10 @@ export const BlockDetails = () => {
             {
               label: 'Extrinsics',
               content: block ? <BlockExtrinsics blockHeight={block.height.toString()} /> : null
+            },
+            {
+              label: 'Events',
+              content: block ? <BlockEvents blockHeight={block.height.toString()} /> : null
             }
           ]}
         />
