@@ -1,6 +1,6 @@
 import { gql, useQuery } from '@apollo/client'
 import { TerminalWindow } from '../components/TerminalWindow'
-import React, {useState} from "react";
+import {useState} from "react";
 import {TerminalLoading} from "../components/TerminalLoading.tsx";
 import {PaginationControls} from "../components/PaginationControls.tsx";
 import {DataTable} from "../components/DataTable.tsx";
@@ -49,7 +49,7 @@ export const Agents = () => {
       <TerminalWindow title="agents" footer={pageControls}>
         {loading && <TerminalLoading/>}
         {error && <div>Error: {error.message}</div>}
-        {data && <DataTable names={['name', 'metadata', 'key', 'register date', 'extrinsic']} records={data.agents.nodes.map((agent: { id: string; registeredAt: string; name: string; }) => {
+        {data && <DataTable names={['name', 'metadata', 'key', 'register date', 'extrinsic']} records={data.agents.nodes.map((agent: { id: string; registeredAt: string; name: string; metadata: string; extrinsicId: number; timestamp: any;}) => {
           return {
             id: agent.id, data: [agent.name, agent.metadata,<ResponsiveAddress linkPath={'account'} address={agent.id} />, <TimeStamp timestamp={agent.timestamp}/>, <Link to={`/extrinsic/${agent.registeredAt}-${formattedNumber(agent.extrinsicId)}`}>{agent.registeredAt}-{formattedNumber(agent.extrinsicId)}</Link>
             ]
