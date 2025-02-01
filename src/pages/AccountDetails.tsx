@@ -6,6 +6,7 @@ import { TerminalLoading } from '../components/TerminalLoading.tsx'
 import styled from 'styled-components'
 import {AccountTransfers} from "./AccountTransfers.tsx";
 import {AccountExtrinsics} from "./AccountExtrinsics.tsx";
+import {AccountDelegations} from "./AccountDelegations.tsx";
 import {CopyButton} from "../components/CopyButton.tsx";
 import { Helmet } from 'react-helmet-async';
 
@@ -115,7 +116,7 @@ export const AccountDetails = () => {
                 },
                 {
                   label: 'Delegations',
-                  content: <div>Coming soon..</div>
+                  content: <AccountDelegations/>
                 }
               ]}
           />

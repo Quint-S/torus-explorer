@@ -1,13 +1,17 @@
 import { gql, useQuery } from '@apollo/client'
 import { TerminalWindow } from '../components/TerminalWindow'
-import {useState} from "react";
+import React, {useState} from "react";
 import {TerminalLoading} from "../components/TerminalLoading.tsx";
 import {PaginationControls} from "../components/PaginationControls.tsx";
 import {DataTable} from "../components/DataTable.tsx";
+import {ResponsiveAddress} from "../components/ResponsiveAddress.tsx";
+import {TimeStamp} from "../components/TimeStamp.tsx";
+import {Link} from "react-router-dom";
+import {formattedNumber} from "../utils/utils.ts";
 
 const GET_AGENTS = gql`
   query GetAgents($first: Int!, $offset: Int!) {
-    agents(first: $first, offset: $offset) {
+    agents(first: $first, offset: $offset, orderBy: REGISTERED_AT_ASC) {
     nodes {
       registeredAt
       timestamp
@@ -45,9 +49,9 @@ export const Agents = () => {
       <TerminalWindow title="agents" footer={pageControls}>
         {loading && <TerminalLoading/>}
         {error && <div>Error: {error.message}</div>}
-        {data && <DataTable names={['Register Block #', 'name', 'key']} records={data.agents.nodes.map((agent: { id: string; registeredAt: string; name: string; }) => {
+        {data && <DataTable names={['name', 'metadata', 'key', 'register date', 'extrinsic']} records={data.agents.nodes.map((agent: { id: string; registeredAt: string; name: string; }) => {
           return {
-            id: agent.id, data: [agent.registeredAt, agent.name, `${agent.id}`
+            id: agent.id, data: [agent.name, agent.metadata,<ResponsiveAddress linkPath={'account'} address={agent.id} />, <TimeStamp timestamp={agent.timestamp}/>, <Link to={`/extrinsic/${agent.registeredAt}-${formattedNumber(agent.extrinsicId)}`}>{agent.registeredAt}-{formattedNumber(agent.extrinsicId)}</Link>
             ]
           }
         })}/>}

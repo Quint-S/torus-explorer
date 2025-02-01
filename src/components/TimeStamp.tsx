@@ -41,7 +41,7 @@ export const TimeStamp = ({ timestamp }: TimeStampProps) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <span ref={containerRef}>
-        {!isHovered ? formattedTime : timeFormatted}
+        {isHovered && !formattedTime.includes(':') ? timeFormatted : formattedTime}
       </span>
     </div>
   );
