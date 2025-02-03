@@ -41,7 +41,7 @@ export const DetailLabel = styled.div`
   color: #00c4ff;
 `
 
-export const DetailValue = styled.div`
+export const DetailValue = styled.div.attrs({className: "overflow-x-auto whitespace-nowrap"})`
   flex-grow: 1;
   color: #ffffff;
 `

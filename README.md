@@ -1,50 +1,38 @@
-# React + TypeScript + Vite
+## Links
+- Live Explorer: https://torex.rs/
+- Torus Network: https://torus.network/
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# TorEx - Torus Blockchain Explorer
 
-Currently, two official plugins are available:
+TorEx is a blockchain explorer for the Torus network. It provides an interface to explore blocks, transactions, accounts, and network statistics on the Torus blockchain (https://torus.network/).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- Real-time blockchain data exploration
+- Detailed view of blocks, extrinsics, and events
+- Account information including balances and transactions
+- Network statistics and metrics
+- Responsive design with hacker terminal-style UI
+- Keyboard navigation support
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Technology Stack
 
-- Configure the top-level `parserOptions` property like this:
+- React 18
+- TypeScript
+- Vite
+- Apollo Client for GraphQL
+- Three.js
+- Tailwind CSS
+- Styled Components
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Development
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+To run the project locally:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+```bash
+# Install dependencies
+npm install
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+# Start development server
+npm run dev
 ```

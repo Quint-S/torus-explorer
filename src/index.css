@@ -106,7 +106,7 @@ pre {
 
 #ascii-logo pre {
   text-shadow: 6px 6px 0 #363636;
-  min-width: 408px
+  min-width: 352px
 }
 
 
@@ -162,3 +162,4 @@ pre {
 .expand-icon::before {
   content: '+ ';
 }
+

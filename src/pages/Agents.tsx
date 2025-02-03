@@ -49,9 +49,23 @@ export const Agents = () => {
       <TerminalWindow title="agents" footer={pageControls}>
         {loading && <TerminalLoading/>}
         {error && <div>Error: {error.message}</div>}
-        {data && <DataTable names={['name', 'metadata', 'key', 'register date', 'extrinsic']} records={data.agents.nodes.map((agent: { id: string; registeredAt: string; name: string; metadata: string; extrinsicId: number; timestamp: any;}) => {
+        {data && <DataTable names={['name', 'key', 'register date', 'extrinsic']} records={data.agents.nodes.map((agent: { id: string; registeredAt: string; name: string; metadata: string; extrinsicId: number; timestamp: any;}) => {
+          const isValidUrl = (url: string) => {
+            try {
+              const parsedUrl = new URL(url);
+              return ['http:', 'https:'].includes(parsedUrl.protocol) && parsedUrl.hostname.includes('.');
+            } catch {
+              return false;
+            }
+          };
+          
           return {
-            id: agent.id, data: [agent.name, agent.metadata,<ResponsiveAddress linkPath={'account'} address={agent.id} />, <TimeStamp timestamp={agent.timestamp}/>, <Link to={`/extrinsic/${agent.registeredAt}-${formattedNumber(agent.extrinsicId)}`}>{agent.registeredAt}-{formattedNumber(agent.extrinsicId)}</Link>
+            id: agent.id,
+            data: [
+              isValidUrl(agent.metadata) ? <a className="whitespace-nowrap" href={agent.metadata} target="_blank" rel="noopener noreferrer">{agent.name}</a> : agent.name,
+              <ResponsiveAddress linkPath={'account'} address={agent.id} />,
+              <TimeStamp timestamp={agent.timestamp}/>,
+              <Link to={`/extrinsic/${agent.registeredAt}-${formattedNumber(agent.extrinsicId)}`}>{agent.registeredAt}-{formattedNumber(agent.extrinsicId)}</Link>
             ]
           }
         })}/>}

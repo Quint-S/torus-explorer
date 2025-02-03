@@ -52,7 +52,8 @@ export const Home = () => {
             <div className={'p-2'}>
               <DetailRow>
                 <DetailLabel>Chain:</DetailLabel>
-                <DetailValue>{data._metadata.chain}</DetailValue>
+                <DetailValue>{data._metadata.chain}
+                </DetailValue>
               </DetailRow>
               <DetailRow>
                 <DetailLabel>Spec:</DetailLabel>
@@ -64,7 +65,7 @@ export const Home = () => {
               </DetailRow>
               <DetailRow>
                 <DetailLabel>Last Timestamp:</DetailLabel>
-                <DetailValue>{new Date(parseInt(data._metadata.lastProcessedTimestamp)).toLocaleString('en-US', { timeZone: 'UTC' })} UTC</DetailValue>
+                <DetailValue>{new Date(parseInt(data._metadata.lastProcessedTimestamp)).toLocaleString('en-US', { timeZone: 'UTC' })}</DetailValue>
               </DetailRow>
               <DetailRow>
                 <DetailLabel>Target Height:</DetailLabel>
