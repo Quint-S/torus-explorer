@@ -13,12 +13,16 @@ const GET_AGENTS = gql`
   query GetAgents($first: Int!, $offset: Int!) {
     agents(first: $first, offset: $offset, orderBy: REGISTERED_AT_ASC) {
     nodes {
+      id
       registeredAt
       timestamp
-      name
-      metadata
-      id
       extrinsicId
+      metadata
+      name
+      stakingFee
+      url
+      weightControlFee
+      weightPenaltyFactor
     }
     totalCount
     }
@@ -49,21 +53,21 @@ export const Agents = () => {
       <TerminalWindow title="agents" footer={pageControls}>
         {loading && <TerminalLoading/>}
         {error && <div>Error: {error.message}</div>}
-        {data && <DataTable names={['name', 'key', 'register date', 'extrinsic']} records={data.agents.nodes.map((agent: { id: string; registeredAt: string; name: string; metadata: string; extrinsicId: number; timestamp: any;}) => {
-          const isValidUrl = (url: string) => {
-            try {
-              const parsedUrl = new URL(url);
-              return ['http:', 'https:'].includes(parsedUrl.protocol) && parsedUrl.hostname.includes('.');
-            } catch {
-              return false;
-            }
-          };
+        {data && <DataTable names={['name', 'key', 'register date', 'extrinsic']} records={data.agents.nodes.map((agent: { id: string; registeredAt: string; name: string; metadata: string; extrinsicId: number; url: string; timestamp: any;}) => {
+          // const isValidUrl = (url: string) => {
+          //   try {
+          //     const parsedUrl = new URL(url);
+          //     return ['http:', 'https:'].includes(parsedUrl.protocol) && parsedUrl.hostname.includes('.');
+          //   } catch {
+          //     return false;
+          //   }
+          // };
           
           return {
             id: agent.id,
             data: [
-              isValidUrl(agent.metadata) ? <a className="whitespace-nowrap" href={agent.metadata} target="_blank" rel="noopener noreferrer">{agent.name}</a> : agent.name,
-              <ResponsiveAddress linkPath={'account'} address={agent.id} />,
+              <ResponsiveAddress address={agent.name}/>,
+              <ResponsiveAddress linkPath={'agent'} address={agent.id} />,
               <TimeStamp timestamp={agent.timestamp}/>,
               <Link to={`/extrinsic/${agent.registeredAt}-${formattedNumber(agent.extrinsicId)}`}>{agent.registeredAt}-{formattedNumber(agent.extrinsicId)}</Link>
             ]

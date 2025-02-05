@@ -14,6 +14,7 @@ import {ExtrinsicDetails} from "./pages/ExtrinsicDetails.tsx";
 import { HelmetProvider } from 'react-helmet-async';
 import { BlockDetails } from './pages/BlockDetails.tsx'
 import { useKeyboardNavigation } from './hooks/useKeyboardNavigation'
+import {AgentDetails} from "./pages/AgentDetails.tsx";
 
 const AppContent = () => {
 
@@ -45,6 +46,7 @@ const AppContent = () => {
             <Route path="/account/:address" element={ <AccountDetails />} />
             <Route path="/extrinsic/:id" element={ <ExtrinsicDetails />} />
             <Route path="/block/:height" element={ <BlockDetails />} />
+            <Route path="/agent/:id" element={ <AgentDetails />} />
           </Routes>
         </div>
       </div>
