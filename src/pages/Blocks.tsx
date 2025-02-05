@@ -26,7 +26,7 @@ export const Blocks = () => {
   const itemsPerPage = 25;
 
   const { loading, error, data } = useQuery(GET_BLOCKS, {
-    variables: { first: itemsPerPage, offset: currentPage * itemsPerPage }
+    variables: { first: itemsPerPage, offset: (currentPage * itemsPerPage)+1 }
   });
 
 
