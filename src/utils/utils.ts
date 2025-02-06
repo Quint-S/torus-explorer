@@ -2,6 +2,19 @@ export function formatAddress(address: string){
     return `${address.slice(0, 4)}..${address.slice(-4)}`;
 }
 
+export function formatTORUSPrecise(torusAmount: number){
+    const amount = torusAmount / 1000000000000000000;
+    let s = amount.toFixed(2);
+    if(s.endsWith('0')){
+        s = s.substring(0, s.length-1);
+    }
+    if(s.endsWith('0')){
+        s = s.substring(0, s.length-2);
+    }
+    return `${s}♓︎`;
+}
+
+
 export function formatTORUS(torusAmount: number){
     const amount = torusAmount / 1000000000000000000;
     if(amount > 9999){

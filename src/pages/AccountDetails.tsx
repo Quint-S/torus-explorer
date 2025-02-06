@@ -1,6 +1,6 @@
 import { gql, useQuery } from '@apollo/client'
 import {TerminalTabs, TerminalWindow} from '../components/TerminalWindow'
-import { formatTORUS } from '../utils/utils.ts'
+import {formatTORUS, formatTORUSPrecise} from '../utils/utils.ts'
 import {useParams} from 'react-router-dom'
 import { TerminalLoading } from '../components/TerminalLoading.tsx'
 import styled from 'styled-components'
@@ -91,15 +91,15 @@ export const AccountDetails = () => {
                 </DetailRow>
                 <DetailRow>
                   <DetailLabel>Total Balance:</DetailLabel>
-                  <DetailValue>{formatTORUS(data.account.balanceTotal)}</DetailValue>
+                  <DetailValue>{formatTORUSPrecise(data.account.balanceTotal)}</DetailValue>
                 </DetailRow>
                 <DetailRow>
                   <DetailLabel>Free Balance:</DetailLabel>
-                  <DetailValue>{formatTORUS(data.account.balanceFree)}</DetailValue>
+                  <DetailValue>{formatTORUSPrecise(data.account.balanceFree)}</DetailValue>
                 </DetailRow>
                 <DetailRow>
                   <DetailLabel>Staked Balance:</DetailLabel>
-                  <DetailValue>{formatTORUS(data.account.balanceStaked)}</DetailValue>
+                  <DetailValue>{formatTORUSPrecise(data.account.balanceStaked)}</DetailValue>
                 </DetailRow>
               </div>
           )}
