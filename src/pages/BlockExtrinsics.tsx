@@ -6,7 +6,7 @@ import { ResponsiveAddress } from "../components/ResponsiveAddress.tsx";
 import React from "react";
 
 const GET_BLOCK_EXTRINSICS = gql`
-  query GetBlockExtrinsics($height: BigFloat!) {
+  query GetBlockExtrinsics($height: Int!) {
     extrinsics(filter: {blockNumber: {equalTo: $height}}, orderBy: EXTRINSIC_ID_ASC) {
       nodes {
         id

@@ -7,7 +7,7 @@ interface ExtrinsicEventsProps {
   extrinsicId: string;
 }
 export const GET_LAST_EVM_EVENT = gql`
-  query GetLastEVMEvent($blockNumber: BigFloat!, $extrinsicId: Int!) {
+  query GetLastEVMEvent($blockNumber: Int!, $extrinsicId: Int!) {
     events(filter: {and: {blockNumber: {equalTo: $blockNumber}, extrinsicId: {equalTo: $extrinsicId}}}) {
       nodes{
         data
@@ -20,7 +20,7 @@ export const GET_LAST_EVM_EVENT = gql`
 export const EthereumTransfer: React.FC<ExtrinsicEventsProps> = ({ extrinsicId }) => {
   const { loading, error, data } = useQuery(GET_LAST_EVM_EVENT, {
     variables: {
-      blockNumber: extrinsicId.split('-')[0],
+      blockNumber: parseInt(extrinsicId.split('-')[0]),
       extrinsicId: parseInt(extrinsicId.split('-')[1] || '0')
     }});
   const executed = data && JSON.parse(data.events.nodes.find((event: { eventName: string; }) => { return event.eventName === 'Executed'}).data)[0];

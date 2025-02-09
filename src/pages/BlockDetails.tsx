@@ -121,11 +121,11 @@ export const BlockDetails = () => {
           tabs={[
             {
               label: 'Extrinsics',
-              content: block ? <BlockExtrinsics blockHeight={block.height.toString()} /> : null
+              content: block ? <BlockExtrinsics blockHeight={block.height} /> : null
             },
             {
               label: 'Events',
-              content: block ? <BlockEvents blockHeight={block.height.toString()} /> : null
+              content: block ? <BlockEvents blockHeight={block.height} /> : null
             }
           ]}
         />

@@ -6,7 +6,7 @@ import React from "react";
 import {JsonView} from "react-json-view-lite";
 
 const GET_EXTRINSIC_EVENTS = gql`
-  query GetExtrinsicEvents($blockNumber: BigFloat!, $extrinsicId: Int!) {
+  query GetExtrinsicEvents($blockNumber: Int!, $extrinsicId: Int!) {
       events(filter: {and: {blockNumber: {equalTo: $blockNumber}, extrinsicId: {equalTo: $extrinsicId}}}) {
     nodes{
       id
@@ -28,7 +28,7 @@ export const ExtrinsicEvents: React.FC<ExtrinsicEventsProps> = ({ extrinsicId })
   const { id } = useParams()
   const { loading, error, data } = useQuery(GET_EXTRINSIC_EVENTS, {
     variables: {
-      blockNumber: extrinsicId?.split('-')[0],
+      blockNumber: parseInt(extrinsicId?.split('-')[0]),
       extrinsicId: parseInt(extrinsicId?.split('-')[1] || '0')
     }
   })

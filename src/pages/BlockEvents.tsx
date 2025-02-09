@@ -5,7 +5,7 @@ import React from "react";
 import {JsonView} from "react-json-view-lite";
 
 const GET_BLOCK_EVENTS = gql`
-  query GetBlockEvents($height: BigFloat!) {
+  query GetBlockEvents($height: Int!) {
     events(filter: {blockNumber: {equalTo: $height}}, orderBy: ID_ASC) {
       nodes{
         id
