@@ -4,7 +4,6 @@ import { formattedNumber, formatTORUS } from '../utils/utils.ts'
 import { Link, useParams } from 'react-router-dom'
 import { TerminalLoading } from '../components/TerminalLoading.tsx'
 import { DataTable } from "../components/DataTable.tsx"
-import { ResponsiveAddress } from "../components/ResponsiveAddress.tsx"
 import { useState } from "react"
 import { PaginationControls } from "../components/PaginationControls.tsx"
 
@@ -27,6 +26,12 @@ const GET_ACCOUNT_DELEGATIONS = gql`
       }
       totalCount
     }
+    agents {
+      nodes {
+        id
+        name
+      }
+    }
   }
 `
 
@@ -38,6 +43,11 @@ export const AccountDelegations = () => {
   const { loading, error, data } = useQuery(GET_ACCOUNT_DELEGATIONS, {
     variables: { first: itemsPerPage, offset: currentPage * itemsPerPage, address }
   });
+
+  const getAgentName = (agentId: string) => {
+    const agent = data?.agents?.nodes?.find((a: { id: string; name: string }) => a.id === agentId);
+    return agent?.name || agentId;
+  };
 
   const pageControls = (
     <>
@@ -81,7 +91,7 @@ export const AccountDelegations = () => {
               data: [
                 event.action,
                 formatTORUS(event.amount),
-                <ResponsiveAddress linkPath="account" address={event.agent} />,
+                <Link to={`/agent/${event.agent}`}>{getAgentName(event.agent)}</Link>,
                 event.height,
                 <Link to={`/extrinsic/${event.height}-${formattedNumber(event.extrinsicId)}`}>
                   {event.height}-{formattedNumber(event.extrinsicId)}
