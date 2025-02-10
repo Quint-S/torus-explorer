@@ -1,8 +1,7 @@
 import React from 'react';
 import { ResponsiveAddress } from './ResponsiveAddress';
 import { DataTable } from './DataTable';
-import {DetailLabel, DetailValue} from "../pages/AccountDetails.tsx";
-import {CopyButton} from "./CopyButton.tsx";
+import {DetailLabel} from "../pages/AccountDetails.tsx";
 
 interface TransferDetailsProps {
   data: string;
@@ -11,6 +10,8 @@ interface TransferDetailsProps {
 export const TransferDetails: React.FC<TransferDetailsProps> = ({ data }) => {
   const [from, to, amountHex] = JSON.parse(data);
   const amount = BigInt(amountHex).toString();
+
+
 
   return ( <div style={{borderBottom: "1px solid #0050a1"}}>
           <DetailLabel>Transfer:</DetailLabel>

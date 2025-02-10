@@ -1,6 +1,6 @@
 export interface TableRecord {
   id: string;
-  data: string[];
+  data: any[];
 }
 export interface RecordData {
   name: string;
