@@ -66,7 +66,7 @@ export const Agents = () => {
           return {
             id: agent.id,
             data: [
-              <ResponsiveAddress address={agent.name}/>,
+              <Link to={`/agent/${agent.id}`}>{agent.name}</Link>,
               <ResponsiveAddress linkPath={'agent'} address={agent.id} />,
               <TimeStamp timestamp={agent.timestamp}/>,
               <Link to={`/extrinsic/${agent.registeredAt}-${formattedNumber(agent.extrinsicId)}`}>{agent.registeredAt}-{formattedNumber(agent.extrinsicId)}</Link>
