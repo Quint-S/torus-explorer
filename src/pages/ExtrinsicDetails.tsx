@@ -11,6 +11,7 @@ import { Helmet } from 'react-helmet-async';
 import {JsonView} from "react-json-view-lite";
 import {EthereumTransfer} from "../components/extrinsics/EthereumTransfer.tsx";
 import {ResponsiveAddress} from "../components/ResponsiveAddress.tsx";
+import {TransferDetails} from "../components/TransferDetails.tsx";
 
 export const GET_EXTRINSIC = gql`
   query GetExtrinsic($id: String!) {
@@ -50,16 +51,39 @@ export const GET_EXTRINSIC_BY_HASH = gql`
   }
 `
 
+const GET_EXTRINSIC_EVENTS = gql`
+  query GetExtrinsicEvents($blockNumber: Int!, $extrinsicId: Int!) {
+      events(filter: {and: {blockNumber: {equalTo: $blockNumber}, extrinsicId: {equalTo: $extrinsicId}}}) {
+    nodes{
+      id
+      blockNumber
+      extrinsicId
+      eventName
+      module
+      data
+      }
+    }
+  }
+`
 
 export const ExtrinsicDetails = () => {
   const { id } = useParams()
   const { loading, error, data } = useQuery(id?.startsWith('0x') ? GET_EXTRINSIC_BY_HASH : GET_EXTRINSIC, {
     variables: { id }
   })
-    let extrinsic = data?.extrinsic;
-    if(id?.startsWith('0x') && data){
-        extrinsic = data.extrinsics.nodes[0];
-    }
+
+  let extrinsic = data?.extrinsic;
+  if(id?.startsWith('0x') && data){
+      extrinsic = data.extrinsics.nodes[0];
+  }
+
+  const { loading: eventsLoading, error: eventsError, data: eventsData } = useQuery(GET_EXTRINSIC_EVENTS, {
+    variables: {
+      blockNumber: extrinsic?.blockNumber,
+      extrinsicId: extrinsic?.extrinsicId
+    },
+    skip: !extrinsic
+  })
 
   if (!id) {
     return <div>Error: No extrinsic ID provided</div>
@@ -69,7 +93,7 @@ export const ExtrinsicDetails = () => {
   const description = extrinsic 
     ? `Extrinsic ${extrinsic.id} - ${extrinsic.module}::${extrinsic.method} called by ${extrinsic.signer} - Status: ${extrinsic.success ? 'Success' : 'Failed'}`
     : 'View extrinsic details on Torus Explorer';
-
+  const transferEvent = eventsData?.events?.nodes?.find((event: { eventName: string; }) => event.eventName === 'Transfer');
   return (
     <>
       <Helmet>
@@ -122,6 +146,9 @@ export const ExtrinsicDetails = () => {
             <DetailLabel>Hash:</DetailLabel>
             <DetailValue>{extrinsic.hash} <CopyButton textToCopy={extrinsic.hash}/></DetailValue>
           </DetailRow>
+            {transferEvent && (
+                  <TransferDetails data={transferEvent.data} />
+            )}
           <DetailRow>
             <DetailLabel>Arguments:</DetailLabel>
             <DetailValue><JsonView clickToExpandNode={true} shouldExpandNode={(level) => {
@@ -152,7 +179,11 @@ export const ExtrinsicDetails = () => {
                 tabs={[
                     {
                         label: 'Events',
-                        content: <ExtrinsicEvents extrinsicId={extrinsic.id} />
+                        content: <ExtrinsicEvents 
+                                    loading={eventsLoading}
+                                    error={eventsError}
+                                    events={eventsData?.events?.nodes || []}
+                                  />
                     }
                 ]}
             />

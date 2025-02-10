@@ -1,53 +1,40 @@
-import { gql, useQuery } from '@apollo/client'
-import {useParams} from 'react-router-dom'
-import { TerminalLoading } from '../components/TerminalLoading.tsx'
-import {DataTable} from "../components/DataTable.tsx";
 import React from "react";
-import {JsonView} from "react-json-view-lite";
-
-const GET_EXTRINSIC_EVENTS = gql`
-  query GetExtrinsicEvents($blockNumber: Int!, $extrinsicId: Int!) {
-      events(filter: {and: {blockNumber: {equalTo: $blockNumber}, extrinsicId: {equalTo: $extrinsicId}}}) {
-    nodes{
-      id
-      blockNumber
-      extrinsicId
-      eventName
-      module
-      data
-      }
-    }
-  }
-`
+import { DataTable } from "../components/DataTable.tsx";
+import { JsonView } from "react-json-view-lite";
+import { TerminalLoading } from '../components/TerminalLoading.tsx';
 
 interface ExtrinsicEventsProps {
-  extrinsicId: string;
+  loading: boolean;
+  error?: any;
+  events: Array<{
+    id: string;
+    blockNumber: string;
+    extrinsicId: string;
+    eventName: string;
+    module: string;
+    data: string;
+  }>;
 }
 
-export const ExtrinsicEvents: React.FC<ExtrinsicEventsProps> = ({ extrinsicId }) => {
-  const { id } = useParams()
-  const { loading, error, data } = useQuery(GET_EXTRINSIC_EVENTS, {
-    variables: {
-      blockNumber: parseInt(extrinsicId?.split('-')[0]),
-      extrinsicId: parseInt(extrinsicId?.split('-')[1] || '0')
-    }
-  })
-
-  if (!id) {
-    return <div>Error: No extrinsic ID provided</div>
-  }
+export const ExtrinsicEvents: React.FC<ExtrinsicEventsProps> = ({ loading, error, events }) => {
+  if (loading) return <TerminalLoading />;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div>
-      {loading && <TerminalLoading />}
-      {error && <div>Error: {error.message}</div>}
 
-      {data && <DataTable names={['Event Idx', 'event', 'data']} records={data.events.nodes.map((event: {
-        data: string;
-        id: string; blockNumber: string; module: string; eventName: string; }) => {
-        return {
-          id: event.id, data: [event.id, `${event.module}::${event.eventName}`, <JsonView data={JSON.parse(event.data)} shouldExpandNode={()=> false}
-                                                                                          style={{
+
+      <DataTable 
+        names={['Event Idx', 'event', 'data']} 
+        records={events.map((event) => ({
+          id: event.id,
+          data: [
+            event.id,
+            `${event.module}::${event.eventName}`,
+            <JsonView 
+              data={JSON.parse(event.data)} 
+              shouldExpandNode={() => false}
+              style={{
                                                                                             "container": "break-all text-left",
                                                                                             "basicChildStyle": "pl-5",
                                                                                             "childFieldsContainer": "_child-fields-container_78paz_60",
@@ -65,14 +52,14 @@ export const ExtrinsicEvents: React.FC<ExtrinsicEventsProps> = ({ extrinsicId })
                                                                                             "collapsedContent": "_collapsed-content-light_78paz_118 _collapsed-content-base_78paz_40 _pointer_78paz_21",
                                                                                             "noQuotesForStringValues": false,
                                                                                             "quotesForFieldNames": false
-                                                                                          }}/>
-          ]
-        }
-      })}/>}
-      {!loading && data?.events?.nodes?.length === 0 && (
-          <div>No events found for this extrinsic</div>
-      )}
-
-    </div>
-  )
-}
+                                                                                          }}
+                                                                                          />
+                                                                                        ]
+                                                                                      }))}
+                                                                                    />
+                                                                                    {events.length === 0 && (
+                                                                                      <div>No events found for this extrinsic</div>
+                                                                                    )}
+                                                                                  </div>
+                                                                                );
+                                                                              };
