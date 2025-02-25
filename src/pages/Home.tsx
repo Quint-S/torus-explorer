@@ -72,7 +72,7 @@ export const Home = () => {
                 <DetailValue>{data._metadata.targetHeight}</DetailValue>
               </DetailRow>
               <DetailRow>
-                <DetailLabel>Total Supply:</DetailLabel>
+                <DetailLabel>Max Supply:</DetailLabel>
                 <DetailValue>{formatTORUS(144000000000000000000000000)} ♓︎TORUS</DetailValue>
               </DetailRow>
               <DetailRow>
