@@ -50,7 +50,7 @@ export const ResponsiveAddress = ({ address, linkPath }: ResponsiveAddressProps)
       <span style={{background: 'inherit'}}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}>
-        {!isHovered ? formattedAddress : (displayName || formattedAddress)}
+        {isHovered ? formattedAddress : (displayName || formattedAddress)}
       </span>
       </Link>
   ) : (
