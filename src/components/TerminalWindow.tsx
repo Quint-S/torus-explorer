@@ -111,7 +111,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({ title, children,
         <TerminalContent>
           {children}
         </TerminalContent>
-        <TerminalFooter>{footer ? footer : 'torus-e♓︎plorer v0.1.0 BETA'}</TerminalFooter>
+        <TerminalFooter>{footer ? footer : 'torus-e♓︎plorer v0.2.1 BETA'}</TerminalFooter>
       </TerminalContainer>
     )
   }

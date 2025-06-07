@@ -7,7 +7,6 @@ import {Accounts} from './pages/Accounts'
 import {Agents} from './pages/Agents'
 import {Extrinsics} from './pages/Extrinsics'
 import {Events} from './pages/Events'
-import ThreeJsTorus from './components/ThreeJsTorus'
 import { AccountDetails } from './pages/AccountDetails'
 import { StatusBar } from './components/StatusBar.tsx'
 import {ExtrinsicDetails} from "./pages/ExtrinsicDetails.tsx";
@@ -15,13 +14,14 @@ import { HelmetProvider } from 'react-helmet-async';
 import { BlockDetails } from './pages/BlockDetails.tsx'
 import { useKeyboardNavigation } from './hooks/useKeyboardNavigation'
 import {AgentDetails} from "./pages/AgentDetails.tsx";
+import Background from "./components/Background.tsx";
 
 const AppContent = () => {
 
   useKeyboardNavigation();
   return (
     <>
-      <ThreeJsTorus />
+      <Background />
       <div className={'flex flex-col'} style={{
         width: '100vw', 
         height: '100vh', 
