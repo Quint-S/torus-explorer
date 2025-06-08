@@ -10,6 +10,7 @@ const shader = {
     f: { value: 0.0 },
     s: { value: 0.0 },
     b: { value: null },
+    z: { value: 0.9 }, // zoom factor
   },
   vertexShader: `precision highp float;
     in vec3 position;
@@ -27,6 +28,7 @@ const shader = {
     uniform float t;
     uniform float f;
     uniform float s;
+    uniform float z;
     uniform sampler2D b;
     out vec4 o;
     
@@ -48,7 +50,7 @@ const shader = {
     
     void main() {
       #define R rotate2D
-      vec2 p=FC.xy,q,l=(p+p-r)/r.x*.9,n;float s=5.,h,i,L=dot(l,l),e=129.;for(;i++<e;)l*=R(4.95),n*=R(4.8+sin(t)*.05)+rotate2D(t)*.035,h+=dot(r/r,sin(q=l*s*i+n)/s*3.5),n+=cos(q),s*=1.07;h=.4-h*.3-L;
+      vec2 p=FC.xy,q,l=(p+p-r)/r.x*z,n;float s=5.,h,i,L=dot(l,l),e=129.;for(;i++<e;)l*=R(4.95),n*=R(4.8+sin(t)*.05)+rotate2D(t)*.035,h+=dot(r/r,sin(q=l*s*i+n)/s*3.5),n+=cos(q),s*=1.07;h=.4-h*.3-L;
       
       vec2 uv = FC.xy / r.xy;
       float grain = noise(uv * 900.0 + t * 0.5) * 0.15;
@@ -76,9 +78,13 @@ const Background: React.FC = () => {
   useEffect(() => {
     if (!mountRef.current) return;
 
+    // Mobile detection
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+    const zoomFactor = isMobile ? 0.5 : 0.9; // More zoomed in on mobile
+
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-    const renderer = new THREE.WebGLRenderer({ 
+    const renderer = new THREE.WebGLRenderer({
       antialias: false,
       alpha: true
     });
@@ -96,11 +102,12 @@ const Background: React.FC = () => {
         f: { value: 0.0 },
         s: { value: 0.0 },
         b: { value: null },
+        z: { value: zoomFactor },
         modelViewMatrix: { value: new THREE.Matrix4() },
         projectionMatrix: { value: new THREE.Matrix4() }
       }
     });
-    
+
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
@@ -114,7 +121,7 @@ const Background: React.FC = () => {
     const animate = () => {
       requestAnimationFrame(animate);
 
-      time += 0.006; // ~60fps
+      time += 0.01;
       material.uniforms.t.value = time;
       material.uniforms.r.value.set(window.innerWidth, window.innerHeight);
 
@@ -129,8 +136,12 @@ const Background: React.FC = () => {
     animate();
 
     const handleResize = () => {
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+      const zoomFactor = isMobile ? 0.5 : 0.9;
+      
       renderer.setSize(window.innerWidth, window.innerHeight);
       material.uniforms.r.value.set(window.innerWidth, window.innerHeight);
+      material.uniforms.z.value = zoomFactor;
     };
     window.addEventListener('resize', handleResize);
 
