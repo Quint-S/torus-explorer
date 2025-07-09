@@ -4,6 +4,7 @@ import {formatTORUS} from "../utils/utils.ts";
 import {ASCIILogo} from "../components/ASCIILogo.tsx";
 import {DetailLabel, DetailRow, DetailValue} from "./AccountDetails.tsx";
 import { Helmet } from 'react-helmet-async';
+import {currentPrice} from "../components/StatusBar.tsx";
 
 const GET_NETWORK_INFO = gql`
   query {
@@ -76,12 +77,16 @@ export const Home = () => {
                 <DetailValue>{formatTORUS(144000000000000000000000000)} ♓︎TORUS</DetailValue>
               </DetailRow>
               <DetailRow>
-                <DetailLabel>Circulating supply:</DetailLabel>
+                <DetailLabel>Circulating Supply:</DetailLabel>
                 <DetailValue>{formatTORUS(parseInt(data.circSupply.value) + parseInt(data.totalStake.value))} ♓︎TORUS</DetailValue>
               </DetailRow>
               <DetailRow>
                 <DetailLabel>Staked:</DetailLabel>
-                <DetailValue>{formatTORUS(data.totalStake.value)} ♓︎TORUS</DetailValue>
+                <DetailValue>{formatTORUS(data.totalStake.value)} ♓︎TORUS ({(100*(parseInt(data.totalStake.value)/(parseInt(data.circSupply.value) + parseInt(data.totalStake.value)))).toFixed(2)}%)</DetailValue>
+              </DetailRow>
+              <DetailRow>
+                <DetailLabel>Market Cap:</DetailLabel>
+                <DetailValue>${currentPrice > 0 && formatTORUS((parseInt(data.circSupply.value) + parseInt(data.totalStake.value))*currentPrice)}</DetailValue>
               </DetailRow>
             </div>
             <div className="flex-grow flex items-center justify-center">

@@ -36,7 +36,7 @@ const TimeStatusItem = styled(StatusItem)`
   }
 `;
 
-interface DexScreenerResponse {
+export interface DexScreenerResponse {
   pairs: Array<{
     priceUsd: string;
     volume: { h24: number };
@@ -54,11 +54,10 @@ const GET_SUPPLY = gql`
     }
   }
 `
-
+export let currentPrice = 0;
 export const StatusBar = () => {
   const { loading, error, data } = useQuery(GET_SUPPLY);
   const [price, setPrice] = useState<string | null>(null);
-  // const [liquidity, setLiquidity] = useState<number | null>(null);
   const [loadingPrice, setLoadingPrice] = useState(true);
   const [time, setTime] = useState(new Date().toLocaleTimeString('en-US', { timeZone: 'UTC' }));
 
@@ -69,6 +68,7 @@ export const StatusBar = () => {
         const data: DexScreenerResponse = await response.json();
         const pairData = data.pairs[0];
         setPrice(pairData.priceUsd);
+        currentPrice = parseFloat(pairData.priceUsd);
         setLoadingPrice(false);
       } catch (error) {
         console.error('Error fetching price:', error);
