@@ -50,12 +50,7 @@ const shader = {
     
     void main() {
       #define R rotate2D
-      vec2 p = FC.xy, q, l = (p+p-r) / r.x * z, n;
-      float s = 5.0, h, i, L = dot(l,l), e = 100.;
-      
-      for(;i++<e;)
-        l *= R(4.95), n*=R(4.8+sin(t)*.05)+rotate2D(t*1.81)*.095,h+=dot(r/r,sin(q=l*s*i+n)/s*3.5),n+=cos(q),s*=1.07;h=.4-h*.3-L;
-      
+      vec2 p=FC.xy,q,l=(p+p-r)/r.x*z,n;float s=5.,h,i,L=dot(l,l),e=129.;for(;i++<e;)l*=R(4.95),n*=R(4.8+sin(t)*.05)+rotate2D(t)*.035,h+=dot(r/r,sin(q=l*s*i+n)/s*3.5),n+=cos(q),s*=1.07;h=.4-h*.3-L;
       
       vec2 uv = FC.xy / r.xy;
       float grain = noise(uv * 900.0 + t * 0.5) * 0.15;

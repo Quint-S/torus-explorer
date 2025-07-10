@@ -14,14 +14,14 @@ import { HelmetProvider } from 'react-helmet-async';
 import { BlockDetails } from './pages/BlockDetails.tsx'
 import { useKeyboardNavigation } from './hooks/useKeyboardNavigation'
 import {AgentDetails} from "./pages/AgentDetails.tsx";
-import Background from "./components/Background.tsx";
+import Backgroundv2 from "./components/Backgroundv2.tsx";
 
 const AppContent = () => {
 
   useKeyboardNavigation();
   return (
     <>
-      <Background />
+      <Backgroundv2 />
       <div className={'flex flex-col'} style={{
         width: '100vw', 
         height: '100vh', 
