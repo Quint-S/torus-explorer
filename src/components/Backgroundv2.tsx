@@ -74,10 +74,6 @@ const torusShader = {
     mouse: { value: new THREE.Vector2() },
     backgroundTexture: { value: null },
     //160, 50, 128, 128
-    torusRadius: { value: 160.0 },
-    tubeRadius: { value: 50.0 },
-    segments: { value: 128 },
-    tubeSegments: { value: 128 }
   },
   vertexShader: `
     precision highp float;
@@ -89,9 +85,7 @@ const torusShader = {
     uniform mat4 modelViewMatrix;
     uniform mat4 projectionMatrix;
     uniform mat4 modelMatrix;
-    uniform float time;
-    uniform float torusRadius;
-    uniform float tubeRadius;
+    uniform vec2 resolution;
     
     out vec2 vUv;
     out vec3 vNormal;
@@ -101,13 +95,10 @@ const torusShader = {
       vUv = uv;
       vNormal = normal;
       
-      vec3 torusPosition = position;
-      
-      torusPosition += sin(time * 0.2 + uv.x * 10.0) * vec3(0.0, 0.0, 0.5);
-      
-      vWorldPosition = (modelMatrix * vec4(torusPosition, 1.0)).xyz;
-      
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(torusPosition, 1.0);
+      float scale;
+      scale = (resolution.x / 2000.0);
+
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position * scale, 1.0);
     }
   `,
       fragmentShader: `
@@ -136,7 +127,7 @@ const torusShader = {
       
       vec3 lightDir = normalize(vec3(sin(time * 0.5), cos(time * 0.3), 1.0));
       float diffuse = max(dot(normalize(vNormal), lightDir), 0.0);
-      float ambient = 0.6;
+      float ambient = 1.6;
       
       vec3 color = bgColor * (diffuse + ambient);
       
@@ -199,67 +190,69 @@ const Backgroundv2: React.FC = () => {
     const backgroundMesh = new THREE.Mesh(backgroundGeometry, backgroundMaterial);
     backgroundScene.add(backgroundMesh);
 
-    const torusGeometry = new THREE.TorusGeometry(160, 50, 128, 128);
+    const torusGeometry = new THREE.TorusGeometry(160, 100, 128, 128);
     const torusMaterial = new THREE.RawShaderMaterial({
       ...torusShader,
       uniforms: {
         ...torusShader.uniforms,
         backgroundTexture: { value: backgroundRenderTarget.texture },
-        time: { value: 0.0 },
-        resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-        mouse: { value: new THREE.Vector2(0.5, 0.5) }
+        resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
       },
       transparent: true,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
       side: THREE.DoubleSide
     });
-    torusGeometry.scale(0.8, 0.8, 0.8);
-    torusGeometry.rotateX(Math.PI / 1.6);
-    torusGeometry.translate(0, 10,0 );
+    // torusGeometry.scale(1.0, 1.0, 0.7);
+    torusGeometry.rotateX(Math.PI / 1.65);
 
     const torusMesh = new THREE.Mesh(torusGeometry, torusMaterial);
     scene.add(torusMesh);
 
+    const targetFPS = 30;
+    const frameInterval = 1000 / targetFPS;
+    let lastFrameTime = 0;
+    let animationId: number;
 
     let time = 0;
-    const animate = () => {
-      requestAnimationFrame(animate);
+    const animate = (currentTime: number) => {
+      animationId = requestAnimationFrame(animate);
+      if (currentTime - lastFrameTime < frameInterval) {
+        return;
+      }
+      lastFrameTime = currentTime;
 
-      time += 0.005;
+      time += 0.025;
       
       backgroundMaterial.uniforms.t.value = time;
       
       renderer.setRenderTarget(backgroundRenderTarget);
       renderer.render(backgroundScene, backgroundCamera);
       renderer.setRenderTarget(null);
-      
-      torusMaterial.uniforms.time.value = time;
   
-      torusMesh.rotation.y += 0.00005;
+      torusMesh.rotation.y += 0.00105;
       
       renderer.render(scene, camera);
     };
 
-    animate();
+    animate(0);
 
     const handleResize = () => {
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
-      const zoomFactor = isMobile ? 0.5 : 0.9;
+      const zoomFactor = isMobile ? 0.9 : 0.9;
       
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      
-      backgroundMaterial.uniforms.z.value = zoomFactor;
       torusMaterial.uniforms.resolution.value.set(window.innerWidth, window.innerHeight);
     };
     window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animationId);
       mountRef.current?.removeChild(renderer.domElement);
       renderer.dispose();
       backgroundRenderTarget.dispose();
