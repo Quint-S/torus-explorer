@@ -238,8 +238,8 @@ const Backgroundv2: React.FC = () => {
     animate(0);
 
     const handleResize = () => {
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
-      const zoomFactor = isMobile ? 0.9 : 0.9;
+      // const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+      // const zoomFactor = isMobile ? 0.9 : 0.9;
       
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
