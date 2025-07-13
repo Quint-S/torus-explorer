@@ -96,9 +96,15 @@ const torusShader = {
       vNormal = normal;
       
       float scale;
-      scale = (resolution.x / 2000.0);
+      float baseWidth = 3000.0;// * (resolution.x / resolution.y);
+      // if(resolution.x / resolution.y < 1.0) {
+      //   baseWidth = 1000.0;
+      // }
 
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position * scale, 1.0);
+      scale = (resolution.x / baseWidth);
+
+
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
     }
   `,
       fragmentShader: `
@@ -150,7 +156,7 @@ const Backgroundv2: React.FC = () => {
     if (!mountRef.current) return;
 
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
-    const zoomFactor = isMobile ? 0.5 : 0.9;
+    const zoomFactor = isMobile ? 1.0 : 1.0;
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -203,7 +209,8 @@ const Backgroundv2: React.FC = () => {
       depthWrite: false,
       side: THREE.DoubleSide
     });
-    // torusGeometry.scale(1.0, 1.0, 0.7);
+    const scale = isMobile ? 0.5 : 0.6;
+    torusGeometry.scale(scale, scale, scale);
     torusGeometry.rotateX(Math.PI / 1.65);
 
     const torusMesh = new THREE.Mesh(torusGeometry, torusMaterial);
@@ -240,10 +247,9 @@ const Backgroundv2: React.FC = () => {
     const handleResize = () => {
       // const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
       // const zoomFactor = isMobile ? 0.9 : 0.9;
-      
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
-      
+
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       torusMaterial.uniforms.resolution.value.set(window.innerWidth, window.innerHeight);
