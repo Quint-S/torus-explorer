@@ -6,6 +6,7 @@ interface PaginationControlsProps {
   itemsPerPage: number;
   dataLength?: number;
   onPageChange: (page: number) => void;
+  isLoadingTotal?: boolean;
 }
 
 export const PaginationControls = ({
@@ -13,7 +14,8 @@ export const PaginationControls = ({
   totalCount,
   itemsPerPage,
   dataLength,
-  onPageChange
+  onPageChange,
+  isLoadingTotal = false
 }: PaginationControlsProps) => {
   const [inputValue, setInputValue] = useState((currentPage + 1).toString());
 
@@ -57,7 +59,7 @@ const handlePageChange = (e: React.KeyboardEvent<HTMLInputElement>) => {
   className="w-12 mx-1 text-center bg-transparent border border-gray-400 rounded-none focus:outline-none appearance-none"
   style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
 />
-        <span>of {totalPages}</span>
+        <span>of {isLoadingTotal ? '...' : totalPages}</span>
         <button
           onClick={() => onPageChange(currentPage+1)}
           disabled={Boolean((dataLength && dataLength < itemsPerPage))}
@@ -67,7 +69,7 @@ const handlePageChange = (e: React.KeyboardEvent<HTMLInputElement>) => {
         </button>
       </div>
       <div>
-        <span style={{paddingLeft: '5px'}}>[{Math.min(((currentPage)*itemsPerPage)+1, totalCount)}..{Math.min((currentPage+1)*itemsPerPage, totalCount)} of {totalCount}]</span>
+        <span style={{paddingLeft: '5px'}}>[{Math.min(((currentPage)*itemsPerPage)+1, totalCount)}..{Math.min((currentPage+1)*itemsPerPage, totalCount)} of {isLoadingTotal ? '...' : totalCount.toLocaleString()}]</span>
       </div>
     </div>
   );

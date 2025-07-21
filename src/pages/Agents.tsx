@@ -87,7 +87,7 @@ export const Agents = () => {
           <FilterBar
             placeholder={'filter by agent name'}
             type={'agents/'}
-            onSearch={(agentName) => { setName(agentName) }}
+            onSearch={(agentName) => { setName(agentName.toLowerCase()) }}
           />
         </div>
         {loading && <TerminalLoading/>}
