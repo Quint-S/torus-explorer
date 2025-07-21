@@ -27,7 +27,7 @@ const AppContent = () => {
         height: '100vh', 
         padding: '10px', 
         paddingBottom: '40px',
-        backgroundColor: 'rgba(0,0,0,30%)', 
+        backgroundColor: 'rgba(0,0,0,50%)', 
         backgroundClip: 'content-box',
         position: 'relative',
         overflow: 'auto'

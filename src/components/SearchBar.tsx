@@ -5,7 +5,7 @@ interface SearchBarProps {
   onSearch: (search: string) => void;
 }
 
-const TerminalInput = styled.input`
+export const TerminalInput = styled.input`
   background: inherit;
   outline: none;
   width: 100%;
@@ -16,13 +16,13 @@ const TerminalInput = styled.input`
   }
 `;
 
-const TerminalForm = styled.form`
+export const TerminalForm = styled.form`
   display: flex;
   align-items: center;
   width: 100%;
 `;
 
-const Prompt = styled.span`
+export const Prompt = styled.span`
   white-space: nowrap;
 
   .username {
