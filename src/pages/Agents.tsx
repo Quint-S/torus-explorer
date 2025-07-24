@@ -62,7 +62,7 @@ export const Agents = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 25;
   const [name, setName] = useState('');
-  const [sortOrder, setSortOrder] = useState<'REGISTERED_AT_ASC' | 'REGISTERED_AT_DESC' | 'NAME_ASC' | 'NAME_DESC'>('REGISTERED_AT_ASC');
+  const [sortOrder, setSortOrder] = useState<'REGISTERED_AT_ASC' | 'REGISTERED_AT_DESC' | 'NAME_ASC' | 'NAME_DESC'>('REGISTERED_AT_DESC');
 
   const {loading, error, data} = useQuery(name !== '' ? GET_FILTERED_AGENTS : GET_AGENTS, {
     variables: {first: itemsPerPage, offset: currentPage * itemsPerPage, name: name, orderBy: sortOrder}
