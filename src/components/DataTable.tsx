@@ -11,9 +11,10 @@ export interface RecordData {
 interface TableProps {
   names: string[];
   records: TableRecord[];
+  onColumnHeaderClick?: (columnIndex: number, columnName: string) => void;
 }
 
-export const DataTable = ({ names, records }: TableProps) => {
+export const DataTable = ({ names, records, onColumnHeaderClick }: TableProps) => {
   return (
       <table className="divide-y divide-blue-950 w-full">
         <thead>
@@ -21,7 +22,8 @@ export const DataTable = ({ names, records }: TableProps) => {
             {names.map((name, index) => (
               <th
                 key={index}
-                className="py-2 text-center text-gray-400 uppercase"
+                className={`py-2 text-center text-gray-400 uppercase ${onColumnHeaderClick ? 'cursor-pointer hover:text-white' : ''}`}
+                onClick={() => onColumnHeaderClick?.(index, name)}
               >
                 {name}
               </th>

@@ -11,11 +11,11 @@ import {formattedNumber} from "../utils/utils.ts";
 import {FilterBar} from "../components/FilterBar.tsx";
 
 const GET_AGENTS = gql`
-  query GetAgents($first: Int!, $offset: Int!) {
+  query GetAgents($first: Int!, $offset: Int!, $orderBy: [AgentsOrderBy!]) {
     agents(
     first: $first
     offset: $offset
-    orderBy: REGISTERED_AT_ASC
+    orderBy: $orderBy
     ) {
     nodes {
       id
@@ -34,12 +34,12 @@ const GET_AGENTS = gql`
   }
 `
 const GET_FILTERED_AGENTS = gql`
-  query GetFilteredAgents($first: Int!, $offset: Int!, $name: String!) {
+  query GetFilteredAgents($first: Int!, $offset: Int!, $name: String!, $orderBy: [AgentsOrderBy!]) {
     agents(
     first: $first
     offset: $offset
     filter: { name: { includes: $name } }
-    orderBy: REGISTERED_AT_ASC
+    orderBy: $orderBy
     ) {
     nodes {
       id
@@ -62,11 +62,21 @@ export const Agents = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 25;
   const [name, setName] = useState('');
+  const [sortOrder, setSortOrder] = useState<'REGISTERED_AT_ASC' | 'REGISTERED_AT_DESC' | 'NAME_ASC' | 'NAME_DESC'>('REGISTERED_AT_ASC');
 
   const {loading, error, data} = useQuery(name !== '' ? GET_FILTERED_AGENTS : GET_AGENTS, {
-    variables: {first: itemsPerPage, offset: currentPage * itemsPerPage, name: name}
+    variables: {first: itemsPerPage, offset: currentPage * itemsPerPage, name: name, orderBy: sortOrder}
   });
 
+  const handleColumnHeaderClick = (_columnIndex: number, columnName: string) => {
+    if (columnName === 'extrinsic' || columnName === 'register date') {
+      setSortOrder(prev => prev === 'REGISTERED_AT_ASC' ? 'REGISTERED_AT_DESC' : 'REGISTERED_AT_ASC');
+      setCurrentPage(0);  
+    }else if (columnName === 'name') {
+      setSortOrder(prev => prev === 'NAME_ASC' ? 'NAME_DESC' : 'NAME_ASC');
+      setCurrentPage(0);  
+    }
+  };
 
   const pageControls = (
       <>
@@ -92,7 +102,9 @@ export const Agents = () => {
         </div>
         {loading && <TerminalLoading/>}
         {error && <div>Error: {error.message}</div>}
-        {data && <DataTable names={['name', 'key', 'register date', 'extrinsic']} records={data.agents.nodes.map((agent: { id: string; registeredAt: string; name: string; metadata: string; extrinsicId: number; url: string; timestamp: any;}) => {
+        {data && <DataTable 
+          names={['name', 'key', 'register date', 'extrinsic']} 
+          records={data.agents.nodes.map((agent: { id: string; registeredAt: string; name: string; metadata: string; extrinsicId: number; url: string; timestamp: any;}) => {
           
           return {
             id: agent.id,
@@ -103,7 +115,9 @@ export const Agents = () => {
               <Link to={`/extrinsic/${agent.registeredAt}-${formattedNumber(agent.extrinsicId)}`}>{agent.registeredAt}-{formattedNumber(agent.extrinsicId)}</Link>
             ]
           }
-        })}/>}
+        })}
+          onColumnHeaderClick={handleColumnHeaderClick}
+        />}
       </TerminalWindow>
   )
 }
