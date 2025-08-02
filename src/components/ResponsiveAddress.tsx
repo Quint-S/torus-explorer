@@ -7,6 +7,7 @@ interface ResponsiveAddressProps {
 }
 const ADDRESS_BOOK = [
   { name: "BASE BRIDGE", address: "5DDXwRsgvdfukGZbq2o27n43qyDaAnZ6rsfeckGxnaQ1ih2D" },
+  { name: "TORUS-TREASURY", address: "5EYCAe5jXm8DLvvQ2YjbsmnoMpDHAfokKZfg12KzGSSAzM4D"},
 ];
 
 export const ResponsiveAddress = ({ address, linkPath }: ResponsiveAddressProps) => {
