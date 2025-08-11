@@ -78,11 +78,11 @@ export const Home = () => {
               </DetailRow>
               <DetailRow>
                 <DetailLabel>Circulating Supply:</DetailLabel>
-                <DetailValue>{formatTORUS(parseInt(data.circSupply.value) + parseInt(data.totalStake.value))} ♓︎TORUS</DetailValue>
+                <DetailValue>{formatTORUS(parseInt(data.circSupply.value))} ♓︎TORUS</DetailValue>
               </DetailRow>
               <DetailRow>
                 <DetailLabel>Staked:</DetailLabel>
-                <DetailValue>{formatTORUS(data.totalStake.value)} ♓︎TORUS ({(100*(parseInt(data.totalStake.value)/(parseInt(data.circSupply.value) + parseInt(data.totalStake.value)))).toFixed(2)}%)</DetailValue>
+                <DetailValue>{formatTORUS(data.totalStake.value)} ♓︎TORUS ({(100*(parseInt(data.totalStake.value)/(parseInt(data.circSupply.value)))).toFixed(2)}%)</DetailValue>
               </DetailRow>
               <DetailRow>
                 <DetailLabel>Market Cap:</DetailLabel>
