@@ -10,7 +10,7 @@ const getApolloClient = () => {
   return new ApolloClient({
     uri: isTestnet 
       ? 'https://api.subquery.network/sq/torus-explorer/torus-test-net'
-      : 'https://index-api.onfinality.io/sq/CommuneExplorer/torus-indexer',
+      : 'https://index-api.onfinality.io/sq/TorusIndexer/torus-indexer',
     cache: new InMemoryCache(),
   })
 }
