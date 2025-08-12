@@ -4,12 +4,15 @@ export function formatAddress(address: string){
 
 export function formatTORUSPrecise(torusAmount: number){
     const amount = torusAmount / 1000000000000000000;
-    let s = amount.toFixed(2);
+    let s = amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     if(s.endsWith('0')){
         s = s.substring(0, s.length-1);
     }
     if(s.endsWith('0')){
         s = s.substring(0, s.length-2);
+    }
+    if(s.endsWith('.')){
+        s = s.slice(0, -1);
     }
     return `${s}♓︎`;
 }
