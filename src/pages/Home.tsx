@@ -86,7 +86,7 @@ export const Home = () => {
               </DetailRow>
               <DetailRow>
                 <DetailLabel>Market Cap:</DetailLabel>
-                <DetailValue>${currentPrice > 0 && formatTORUS((parseInt(data.circSupply.value) + parseInt(data.totalStake.value))*currentPrice)}</DetailValue>
+                <DetailValue>${currentPrice > 0 && formatTORUS(parseInt(data.circSupply.value)*currentPrice)}</DetailValue>
               </DetailRow>
             </div>
             <div className="flex-grow flex items-center justify-center">
